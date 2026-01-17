@@ -1,9 +1,9 @@
-"""Common pydantic response schemas (placeholders)"""
+from typing import Generic, TypeVar, Optional
 from pydantic import BaseModel
-from typing import Any, Optional
 
+T = TypeVar("T")
 
-class ResponseSchema(BaseModel):
-    success: bool
-    data: Optional[Any] = None
-    message: Optional[str] = None
+class ApiResponse(BaseModel, Generic[T]):
+    code: int = 200
+    data: Optional[T] = None
+    message: str = ""

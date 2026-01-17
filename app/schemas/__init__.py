@@ -1,6 +1,46 @@
-"""Schemas package"""
-from .auth import LoginSchema, TokenSchema
-from .rbac import RoleSchema
-from .common import ResponseSchema
+# app/schemas/__init__.py
 
-__all__ = ["LoginSchema", "TokenSchema", "RoleSchema", "ResponseSchema"]
+from app.schemas.common import ApiResponse
+from app.schemas.auth import (
+    RegisterEmailRequest,
+    RegisterPhoneRequest,
+    LoginEmailRequest,
+    LoginPhoneStartRequest,
+    OtpVerifyRequest,
+    RefreshRequest,
+    ForgotPasswordStartRequest,
+    ResetPasswordConfirmRequest,
+    TokenPair,
+    AuthUser,
+)
+from app.schemas.rbac import (
+    RoleCreate,
+    RoleOut,
+    PermissionCreate,
+    PermissionOut,
+    AssignRoleRequest,
+    AssignPermissionToRoleRequest,
+)
+
+__all__ = [
+    # common
+    "ApiResponse",
+    # auth
+    "RegisterEmailRequest",
+    "RegisterPhoneRequest",
+    "LoginEmailRequest",
+    "LoginPhoneStartRequest",
+    "OtpVerifyRequest",
+    "RefreshRequest",
+    "ForgotPasswordStartRequest",
+    "ResetPasswordConfirmRequest",
+    "TokenPair",
+    "AuthUser",
+    # rbac
+    "RoleCreate",
+    "RoleOut",
+    "PermissionCreate",
+    "PermissionOut",
+    "AssignRoleRequest",
+    "AssignPermissionToRoleRequest",
+]

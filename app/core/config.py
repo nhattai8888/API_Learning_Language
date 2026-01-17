@@ -19,5 +19,8 @@ class Settings(BaseSettings):
     # Demo sending
     OTP_DEBUG_LOG: bool = True
 
-
+    REDIS_URL: str = "redis://localhost:6379/0"
+    RBAC_CACHE_TTL_SECONDS: int = 120
+    RATE_LIMIT_WINDOW_SECONDS: int = 60
+    RATE_LIMIT_MAX_ATTEMPTS: int = 20
 settings = Settings()

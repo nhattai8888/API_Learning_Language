@@ -1,0 +1,89 @@
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: vocab_postgres
+    environment:
+      POSTGRES_DB: learning_language
+      POSTGRES_USER: vocab_user
+      POSTGRES_PASSWORD: vocab_pass
+    command: >
+      postgres
+      -c max_connections=400
+      -c shared_buffers=2GB
+      -c effective_cache_size=6GB
+      -c work_mem=16MB
+      -c maintenance_work_mem=256MB
+      -c wal_buffers=16MB
+      -c checkpoint_completion_target=0.9
+      -c max_wal_size=4GB
+      -c min_wal_size=1GB
+      -c synchronous_commit=on
+      -c log_min_duration_statement=500
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vocab_user -d learning_language"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  pgbouncer:
+    image: edoburu/pgbouncer:latest
+    container_name: vocab_pgbouncer
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: vocab_user
+      DB_PASSWORD: vocab_pass
+      DB_NAME: learning_language
+      # PgBouncer config
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 20000
+      DEFAULT_POOL_SIZE: 200
+      MIN_POOL_SIZE: 50
+      RESERVE_POOL_SIZE: 50
+      RESERVE_POOL_TIMEOUT: 5
+      SERVER_IDLE_TIMEOUT: 30
+      SERVER_RESET_QUERY: DISCARD ALL
+      IGNORE_STARTUP_PARAMETERS: extra_float_digits
+      ADMIN_USERS: vocab_user
+      STATS_USERS: vocab_user
+      AUTH_TYPE: md5
+      # Verbose logs (set to 0/1)
+      VERBOSE: 0
+    ports:
+      - "6432:6432"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 6432 || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  redis:
+    image: redis:7-alpine
+    container_name: vocab_redis
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 2gb
+      --maxmemory-policy allkeys-lru
+      --save 60 10000
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  pg_data:
+  redis_data:

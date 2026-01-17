@@ -1,27 +1,12 @@
-import secrets
-import hashlib
-from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
+from datetime import datetime, timedelta, timezone
+from jose import jwt
+from app.core.config import settings
 
-_ph = PasswordHasher()
+def create_jwt(payload: dict, expires_in: timedelta) -> str:
+    now = datetime.now(timezone.utc)
+    to_encode = dict(payload)
+    to_encode.update({"iat": int(now.timestamp()), "exp": int((now + expires_in).timestamp())})
+    return jwt.encode(to_encode, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALG)
 
-def hash_password(password: str) -> str:
-    return _ph.hash(password)
-
-def verify_password(password: str, password_hash: str) -> bool:
-    try:
-        return _ph.verify(password_hash, password)
-    except VerifyMismatchError:
-        return False
-
-def needs_rehash(password_hash: str) -> bool:
-    try:
-        return _ph.check_needs_rehash(password_hash)
-    except Exception:
-        return False
-
-def random_token_urlsafe(nbytes: int = 32) -> str:
-    return secrets.token_urlsafe(nbytes)
-
-def sha256_hex(value: str) -> str:
-    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+def decode_jwt(token: str) -> dict:
+    return jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=[settings.JWT_ALG])
