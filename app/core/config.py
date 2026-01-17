@@ -1,8 +1,10 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
+from pathlib import Path
+ENV_PATH = Path(__file__).resolve().parents[2] / ".env"
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file=str(ENV_PATH), extra="ignore")
 
     APP_NAME: str = "Vocab App API"
 
@@ -23,4 +25,12 @@ class Settings(BaseSettings):
     RBAC_CACHE_TTL_SECONDS: int = 120
     RATE_LIMIT_WINDOW_SECONDS: int = 60
     RATE_LIMIT_MAX_ATTEMPTS: int = 20
+    
+    AUTO_BOOTSTRAP: bool = True
+
+    SUPERADMIN_EMAIL: str | None = None
+    SUPERADMIN_PASSWORD: str | None = None
+    SUPERADMIN_DISPLAY_NAME: str = "Super Admin"
+    SUPERADMIN_PHONE: str | None = None
+
 settings = Settings()

@@ -50,3 +50,15 @@ class ResetStatus(str, enum.Enum):
 class EntityStatus(str, enum.Enum):
     ACTIVE = "ACTIVE"
     DISABLED = "DISABLED"
+
+class LessonType(str, enum.Enum):
+    STANDARD = "STANDARD"
+    BOSS = "BOSS"
+    REVIEW = "REVIEW"
+
+class PublishStatus(str, enum.Enum):
+    DRAFT = "DRAFT"
+    REVIEW = "REVIEW"
+    PUBLISHED = "PUBLISHED"
+    ARCHIVED = "ARCHIVED"
+

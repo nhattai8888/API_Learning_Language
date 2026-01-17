@@ -63,12 +63,12 @@ async def login_email_start(db: AsyncSession, email: str, password: str, device_
     if user.status != UserStatus.ACTIVE:
         raise ValueError("USER_INACTIVE")
 
-    if not user.password_hash or not verify_password_async(password, user.password_hash):
+    if not user.password_hash or not await verify_password_async(password, user.password_hash):
         raise ValueError("INVALID_CREDENTIALS")
 
     # rehash if policy changed
-    if user.password_hash and needs_rehash_async(user.password_hash):
-        user.password_hash = hash_password_async(password)
+    if user.password_hash and await needs_rehash_async(user.password_hash):
+        user.password_hash = await hash_password_async(password)
 
     user.last_login_at = datetime.now(timezone.utc)
 

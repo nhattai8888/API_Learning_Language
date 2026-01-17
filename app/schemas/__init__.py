@@ -22,6 +22,13 @@ from app.schemas.rbac import (
     AssignPermissionToRoleRequest,
 )
 
+from app.schemas.curriculum import (
+    LanguageCreate, LanguageUpdate, LanguageOut,
+    LevelCreate, LevelUpdate, LevelOut,
+    UnitCreate, UnitUpdate, UnitOut,
+    LessonCreate, LessonUpdate, LessonOut,
+)
+
 __all__ = [
     # common
     "ApiResponse",
@@ -43,4 +50,16 @@ __all__ = [
     "PermissionOut",
     "AssignRoleRequest",
     "AssignPermissionToRoleRequest",
+     "LanguageCreate",
+     "LanguageUpdate",
+     "LanguageOut",
+    "LevelCreate",
+    "LevelUpdate",
+    "LevelOut",
+    "UnitCreate",
+    "UnitUpdate",
+    "UnitOut",
+    "LessonCreate",
+    "LessonUpdate",
+    "LessonOut",
 ]

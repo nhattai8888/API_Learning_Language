@@ -1,0 +1,28 @@
+{
+  "roles": [
+    { "code": "STUDENT", "name": "Student" },
+    { "code": "TEACHER", "name": "Teacher" },
+    { "code": "ADMIN", "name": "Admin" },
+    { "code": "SUPERADMIN", "name": "Super Admin" }
+  ],
+  "permissions": [
+    { "code": "LESSON_READ", "module": "content", "description": "View lessons" },
+    { "code": "LESSON_CREATE", "module": "content", "description": "Create lessons" },
+    { "code": "LESSON_UPDATE", "module": "content", "description": "Update lessons" },
+    { "code": "LESSON_PUBLISH", "module": "content", "description": "Publish lessons" },
+
+    { "code": "LEXEME_READ", "module": "vocab", "description": "View vocabulary" },
+    { "code": "LEXEME_CREATE", "module": "vocab", "description": "Create vocabulary" },
+
+    { "code": "USER_READ", "module": "user", "description": "View users" },
+    { "code": "USER_MANAGE", "module": "user", "description": "Manage users" },
+
+    { "code": "ROLE_MANAGE", "module": "rbac", "description": "Manage roles & permissions" }
+  ],
+  "role_permissions": {
+    "STUDENT": ["LESSON_READ", "LEXEME_READ"],
+    "TEACHER": ["LESSON_READ", "LESSON_CREATE", "LESSON_UPDATE", "LEXEME_READ", "LEXEME_CREATE"],
+    "ADMIN": ["LESSON_READ", "LESSON_CREATE", "LESSON_UPDATE", "LESSON_PUBLISH", "LEXEME_READ", "LEXEME_CREATE", "USER_READ", "USER_MANAGE"],
+    "SUPERADMIN": ["*"]
+  }
+}
