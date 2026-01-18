@@ -62,3 +62,20 @@ class PublishStatus(str, enum.Enum):
     PUBLISHED = "PUBLISHED"
     ARCHIVED = "ARCHIVED"
 
+class LessonItemType(str, enum.Enum):
+    MCQ = "MCQ"
+    CLOZE = "CLOZE"
+    MATCH = "MATCH"
+    REORDER = "REORDER"
+    LISTEN = "LISTEN"
+    SPEAK = "SPEAK"
+
+class LessonProgressStatus(str, enum.Enum):
+    NOT_STARTED = "NOT_STARTED"
+    IN_PROGRESS = "IN_PROGRESS"
+    COMPLETED = "COMPLETED"
+
+class AttemptStatus(str, enum.Enum):
+    STARTED = "STARTED"
+    SUBMITTED = "SUBMITTED"
+    PENDING_AI = "PENDING_AI"

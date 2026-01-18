@@ -1,5 +1,3 @@
-# app/schemas/__init__.py
-
 from app.schemas.common import ApiResponse
 from app.schemas.auth import (
     RegisterEmailRequest,
@@ -23,10 +21,33 @@ from app.schemas.rbac import (
 )
 
 from app.schemas.curriculum import (
-    LanguageCreate, LanguageUpdate, LanguageOut,
-    LevelCreate, LevelUpdate, LevelOut,
-    UnitCreate, UnitUpdate, UnitOut,
-    LessonCreate, LessonUpdate, LessonOut,
+    LanguageCreate,
+    LanguageUpdate,
+    LanguageOut,
+    LevelCreate,
+    LevelUpdate,
+    LevelOut,
+    UnitCreate,
+    UnitUpdate,
+    UnitOut,
+    LessonCreate,
+    LessonUpdate,
+    LessonOut,
+)
+
+from app.schemas.lesson_engine import (
+    LessonItemCreate,
+    LessonItemUpdate,
+    LessonItemOut,
+    ChoiceCreate,
+    ChoiceOut,
+    AttemptStartResponse,
+    AttemptSubmitRequest,
+    AttemptSubmitResponse,
+    AttemptOut,
+    AttemptsListResponse,
+    AttemptAIUpdateRequest,
+    AttemptAIUpdateResponse,
 )
 
 __all__ = [
@@ -50,9 +71,9 @@ __all__ = [
     "PermissionOut",
     "AssignRoleRequest",
     "AssignPermissionToRoleRequest",
-     "LanguageCreate",
-     "LanguageUpdate",
-     "LanguageOut",
+    "LanguageCreate",
+    "LanguageUpdate",
+    "LanguageOut",
     "LevelCreate",
     "LevelUpdate",
     "LevelOut",
@@ -62,4 +83,16 @@ __all__ = [
     "LessonCreate",
     "LessonUpdate",
     "LessonOut",
+    "LessonItemCreate",
+    "LessonItemUpdate",
+    "LessonItemOut",
+    "ChoiceCreate",
+    "ChoiceOut",
+    "AttemptStartResponse",
+    "AttemptSubmitRequest",
+    "AttemptSubmitResponse",
+    "AttemptOut",
+    "AttemptsListResponse",
+    "AttemptAIUpdateRequest",
+    "AttemptAIUpdateResponse",
 ]

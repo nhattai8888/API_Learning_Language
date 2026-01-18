@@ -3,6 +3,7 @@ from app.models.user import User
 from app.models.auth import UserIdentity, AuthSession, TrustedDevice, OtpChallenge, PasswordReset
 from app.models.rbac import Role, Permission, UserRole, RolePermission
 from app.models.curriculum import Language, Level, Unit, Lesson
+from app.models.lesson_engine import LessonItem, LessonItemChoice, UserLessonProgress, LessonAttempt
 
 
 __all__ = [
@@ -20,5 +21,9 @@ __all__ = [
     "Language", 
     "Level", 
     "Unit", 
-    "Lesson"
+    "Lesson",
+    "LessonItem", 
+    "LessonItemChoice", 
+    "UserLessonProgress", 
+    "LessonAttempt"
 ]
