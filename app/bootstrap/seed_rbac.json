@@ -102,6 +102,71 @@
       "code": "AI_SPEAKING_SCORE",
       "module": "ai",
       "description": "Gemini speaking scoring"
+    },
+    {
+      "code": "VOCAB_LEXEME_CREATE",
+      "module": "vocab",
+      "description": "Create lexeme"
+    },
+    {
+      "code": "VOCAB_LEXEME_UPDATE",
+      "module": "vocab",
+      "description": "Update lexeme"
+    },
+    {
+      "code": "VOCAB_LEXEME_READ",
+      "module": "vocab",
+      "description": "Read lexeme"
+    },
+    {
+      "code": "VOCAB_SENSE_CREATE",
+      "module": "vocab",
+      "description": "Create sense"
+    },
+    {
+      "code": "VOCAB_SENSE_UPDATE",
+      "module": "vocab",
+      "description": "Update sense"
+    },
+    {
+      "code": "VOCAB_SENSE_READ",
+      "module": "vocab",
+      "description": "Read senses"
+    },
+    {
+      "code": "VOCAB_EXAMPLE_CREATE",
+      "module": "vocab",
+      "description": "Create example"
+    },
+    {
+      "code": "VOCAB_EXAMPLE_UPDATE",
+      "module": "vocab",
+      "description": "Update example"
+    },
+    {
+      "code": "VOCAB_EXAMPLE_READ",
+      "module": "vocab",
+      "description": "Read examples"
+    },
+    {
+      "code": "VOCAB_LESSON_ATTACH",
+      "module": "vocab",
+      "description": "Attach vocab to lesson"
+    },
+    {
+      "code": "VOCAB_LESSON_READ",
+      "module": "vocab",
+      "description": "Read lesson vocab"
+    },
+    {
+      "code": "VOCAB_REVIEW",
+      "module": "vocab",
+      "description": "Review vocab (SRS)"
+    },
+    {
+      "code": "VOCAB_WEAK_WORDS",
+      "module": "vocab",
+      "description": "List weak words"
     }
   ],
   "role_permissions": {

@@ -79,3 +79,84 @@ class AttemptStatus(str, enum.Enum):
     STARTED = "STARTED"
     SUBMITTED = "SUBMITTED"
     PENDING_AI = "PENDING_AI"
+
+class WordPOS(str, enum.Enum):
+    NOUN = "NOUN"
+    VERB = "VERB"
+    ADJ = "ADJ"
+    ADV = "ADV"
+    PREP = "PREP"
+    PHRASE = "PHRASE"
+
+class WordMastery(str, enum.Enum):
+    NEW = "NEW"
+    LEARNING = "LEARNING"
+    KNOWN = "KNOWN"
+    MASTERED = "MASTERED"
+
+class WordFormType(str, enum.Enum):
+    INFLECTION = "INFLECTION"
+    VARIANT = "VARIANT"
+
+class WordDomain(str, enum.Enum):
+    DAILY = "DAILY"
+    ACADEMIC = "ACADEMIC"
+    BUSINESS = "BUSINESS"
+
+import enum
+
+class EntityStatus(str, enum.Enum):
+    ACTIVE = "ACTIVE"
+    DISABLED = "DISABLED"
+
+class LexemeType(str, enum.Enum):
+    NOUN = "NOUN"
+    VERB = "VERB"
+    ADJ = "ADJ"
+    ADV = "ADV"
+    PREP = "PREP"
+    PHRASE = "PHRASE"
+    OTHER = "OTHER"
+
+class PublishStatus(str, enum.Enum):
+    DRAFT = "DRAFT"
+    REVIEW = "REVIEW"
+    PUBLISHED = "PUBLISHED"
+    ARCHIVED = "ARCHIVED"
+
+class WordDomain(str, enum.Enum):
+    DAILY = "DAILY"
+    ACADEMIC = "ACADEMIC"
+    BUSINESS = "BUSINESS"
+    TRAVEL = "TRAVEL"
+    TECH = "TECH"
+    OTHER = "OTHER"
+
+class WordMastery(str, enum.Enum):
+    NEW = "NEW"
+    LEARNING = "LEARNING"
+    KNOWN = "KNOWN"
+    MASTERED = "MASTERED"
+
+class WordErrorType(str, enum.Enum):
+    PRONUNCIATION = "PRONUNCIATION"
+    STRESS = "STRESS"
+    INTONATION = "INTONATION"
+    MEANING = "MEANING"
+    SPELLING = "SPELLING"
+    GRAMMAR = "GRAMMAR"
+    COLLOCATION = "COLLOCATION"
+    OTHER = "OTHER"
+
+class WordErrorSource(str, enum.Enum):
+    SPEAKING = "SPEAKING"
+    LISTENING = "LISTENING"
+    READING = "READING"
+    WRITING = "WRITING"
+    QUIZ = "QUIZ"
+    OTHER = "OTHER"
+
+class Severity(str, enum.Enum):
+    GOOD = "GOOD"
+    OK = "OK"
+    BAD = "BAD"
