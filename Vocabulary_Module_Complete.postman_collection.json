@@ -1,0 +1,1131 @@
+{
+  "info": {
+    "name": "Vocabulary Module - Complete API Test",
+    "description": "Complete Postman collection for Vocabulary Learning API with sample data",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Setup - Authentication",
+      "item": [
+        {
+          "name": "1. Register User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('user_id', data.user_id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vocab-teacher@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"display_name\": \"Vocabulary Teacher\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register/email",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "register", "email"]
+            }
+          }
+        },
+        {
+          "name": "2. Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('access_token', data.access_token);",
+                  "  pm.environment.set('refresh_token', data.refresh_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"vocab-teacher@example.com\",\n  \"password\": \"SecurePass123!\",\n  \"device_id\": \"device-001\",\n  \"device_fingerprint\": \"fingerprint-001\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login/email",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login", "email"]
+            }
+          }
+        },
+        {
+          "name": "3. Get Current User Info",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Setup - Create Curriculum Base",
+      "item": [
+        {
+          "name": "1. Create Language (English)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('language_id', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"en\",\n  \"name\": \"English\",\n  \"script\": \"Latin\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/curriculum/languages",
+              "host": ["{{base_url}}"],
+              "path": ["curriculum", "languages"]
+            }
+          }
+        },
+        {
+          "name": "2. Create Level (A1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('level_id', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language_id\": \"{{language_id}}\",\n  \"code\": \"A1\",\n  \"name\": \"Beginner\",\n  \"sort_order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/curriculum/levels",
+              "host": ["{{base_url}}"],
+              "path": ["curriculum", "levels"]
+            }
+          }
+        },
+        {
+          "name": "3. Create Unit (Greetings)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('unit_id', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language_id\": \"{{language_id}}\",\n  \"level_id\": \"{{level_id}}\",\n  \"title\": \"Unit 1 - Greetings and Introductions\",\n  \"description\": \"Learn basic greetings and how to introduce yourself\",\n  \"sort_order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/curriculum/units",
+              "host": ["{{base_url}}"],
+              "path": ["curriculum", "units"]
+            }
+          }
+        },
+        {
+          "name": "4. Create Lesson (Hello)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('lesson_id', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language_id\": \"{{language_id}}\",\n  \"unit_id\": \"{{unit_id}}\",\n  \"title\": \"Lesson 1 - Hello and Goodbye\",\n  \"objective\": \"Learn to greet people and say goodbye\",\n  \"estimated_minutes\": 15,\n  \"lesson_type\": \"STANDARD\",\n  \"slug\": \"lesson-1-hello-goodbye\",\n  \"sort_order\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/curriculum/lessons",
+              "host": ["{{base_url}}"],
+              "path": ["curriculum", "lessons"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lexemes (Words)",
+      "item": [
+        {
+          "name": "1. Create Lexeme - Hello",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('lexeme_id_1', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language_id\": \"{{language_id}}\",\n  \"type\": \"NOUN\",\n  \"lemma\": \"hello\",\n  \"phoenic\": \"həˈloʊ\",\n  \"audio_url\": \"https://example.com/audio/hello.mp3\",\n  \"difficulty\": 1,\n  \"tags\": {\n    \"category\": \"greetings\",\n    \"frequency\": \"very_common\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes"]
+            }
+          }
+        },
+        {
+          "name": "2. Create Lexeme - Goodbye",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('lexeme_id_2', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language_id\": \"{{language_id}}\",\n  \"type\": \"NOUN\",\n  \"lemma\": \"goodbye\",\n  \"phoenic\": \"ɡʊdˈbaɪ\",\n  \"audio_url\": \"https://example.com/audio/goodbye.mp3\",\n  \"difficulty\": 1,\n  \"tags\": {\n    \"category\": \"greetings\",\n    \"frequency\": \"very_common\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes"]
+            }
+          }
+        },
+        {
+          "name": "3. Create Lexeme - Please",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('lexeme_id_3', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language_id\": \"{{language_id}}\",\n  \"type\": \"ADV\",\n  \"lemma\": \"please\",\n  \"phoenic\": \"pliːz\",\n  \"audio_url\": \"https://example.com/audio/please.mp3\",\n  \"difficulty\": 1,\n  \"tags\": {\n    \"category\": \"politeness\",\n    \"frequency\": \"very_common\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes"]
+            }
+          }
+        },
+        {
+          "name": "4. List Lexemes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes?language_id={{language_id}}&limit=50&offset=0",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes"],
+              "query": [
+                {
+                  "key": "language_id",
+                  "value": "{{language_id}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Search Lexemes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes?language_id={{language_id}}&q=hello&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes"],
+              "query": [
+                {
+                  "key": "language_id",
+                  "value": "{{language_id}}"
+                },
+                {
+                  "key": "q",
+                  "value": "hello"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "6. Get Lexeme by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes/{{lexeme_id_1}}",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes", "{{lexeme_id_1}}"]
+            }
+          }
+        },
+        {
+          "name": "7. Update Lexeme",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lemma\": \"hello\",\n  \"phoenic\": \"həˈloʊ\",\n  \"difficulty\": 2,\n  \"tags\": {\n    \"category\": \"greetings\",\n    \"frequency\": \"very_common\",\n    \"updated\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/lexemes/{{lexeme_id_1}}",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lexemes", "{{lexeme_id_1}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Senses (Definitions)",
+      "item": [
+        {
+          "name": "1. Create Sense - Hello (Definition)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('sense_id_1', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_1}}\",\n  \"sense_index\": 1,\n  \"definition\": \"Used as a greeting or when meeting someone\",\n  \"domain\": \"DAILY\",\n  \"cefr_level\": \"A1\",\n  \"translations\": {\n    \"vi\": \"Xin chào\",\n    \"es\": \"Hola\",\n    \"fr\": \"Bonjour\"\n  },\n  \"collocations\": {\n    \"hello_there\": \"informal greeting\",\n    \"hello_world\": \"computer science term\"\n  },\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/senses",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "senses"]
+            }
+          }
+        },
+        {
+          "name": "2. Create Sense - Goodbye (Definition)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('sense_id_2', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_2}}\",\n  \"sense_index\": 1,\n  \"definition\": \"Said when parting or ending a conversation\",\n  \"domain\": \"DAILY\",\n  \"cefr_level\": \"A1\",\n  \"translations\": {\n    \"vi\": \"Tạm biệt\",\n    \"es\": \"Adiós\",\n    \"fr\": \"Au revoir\"\n  },\n  \"collocations\": {\n    \"goodbye_forever\": \"permanent farewell\",\n    \"say_goodbye\": \"to bid farewell\"\n  },\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/senses",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "senses"]
+            }
+          }
+        },
+        {
+          "name": "3. Create Sense - Please (Definition)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('sense_id_3', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_3}}\",\n  \"sense_index\": 1,\n  \"definition\": \"Used to make a polite request\",\n  \"domain\": \"DAILY\",\n  \"cefr_level\": \"A1\",\n  \"translations\": {\n    \"vi\": \"Vui lòng / Hãy\",\n    \"es\": \"Por favor\",\n    \"fr\": \"S'il vous plaît\"\n  },\n  \"collocations\": {\n    \"please_do\": \"polite imperative\",\n    \"if_you_please\": \"very formal\"\n  },\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/senses",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "senses"]
+            }
+          }
+        },
+        {
+          "name": "4. List Senses by Lexeme",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/senses/by-lexeme/{{lexeme_id_1}}",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "senses", "by-lexeme", "{{lexeme_id_1}}"]
+            }
+          }
+        },
+        {
+          "name": "5. Update Sense",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"definition\": \"Used as a greeting or when meeting someone (Updated)\",\n  \"domain\": \"DAILY\",\n  \"cefr_level\": \"A1\",\n  \"status\": \"PUBLISHED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/senses/{{sense_id_1}}",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "senses", "{{sense_id_1}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Examples (Sentences)",
+      "item": [
+        {
+          "name": "1. Create Example - Hello sentence",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('example_id_1', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sense_id\": \"{{sense_id_1}}\",\n  \"sentence\": \"Hello, how are you today?\",\n  \"translation\": {\n    \"vi\": \"Xin chào, hôm nay bạn khỏe không?\"\n  },\n  \"audio_url\": \"https://example.com/audio/hello-example1.mp3\",\n  \"difficulty\": 1,\n  \"tags\": {\n    \"context\": \"casual\",\n    \"type\": \"greeting_inquiry\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/examples",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "examples"]
+            }
+          }
+        },
+        {
+          "name": "2. Create Example - Goodbye sentence",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('example_id_2', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sense_id\": \"{{sense_id_2}}\",\n  \"sentence\": \"Goodbye, have a nice day!\",\n  \"translation\": {\n    \"vi\": \"Tạm biệt, chúc bạn có một ngày tốt lành!\"\n  },\n  \"audio_url\": \"https://example.com/audio/goodbye-example1.mp3\",\n  \"difficulty\": 1,\n  \"tags\": {\n    \"context\": \"formal\",\n    \"type\": \"farewell_wish\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/examples",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "examples"]
+            }
+          }
+        },
+        {
+          "name": "3. Create Example - Please sentence",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  let data = pm.response.json().data;",
+                  "  pm.environment.set('example_id_3', data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sense_id\": \"{{sense_id_3}}\",\n  \"sentence\": \"Please sit down and make yourself comfortable.\",\n  \"translation\": {\n    \"vi\": \"Vui lòng ngồi xuống và thư giãn bình thường.\"\n  },\n  \"audio_url\": \"https://example.com/audio/please-example1.mp3\",\n  \"difficulty\": 2,\n  \"tags\": {\n    \"context\": \"polite\",\n    \"type\": \"polite_request\"\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/examples",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "examples"]
+            }
+          }
+        },
+        {
+          "name": "4. List Examples by Sense",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/examples/by-sense/{{sense_id_1}}?limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "examples", "by-sense", "{{sense_id_1}}"],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "5. Update Example",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sentence\": \"Hello, how are you doing today?\",\n  \"difficulty\": 1,\n  \"tags\": {\n    \"context\": \"casual\",\n    \"type\": \"greeting_inquiry\",\n    \"modified\": true\n  }\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/examples/{{example_id_1}}",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "examples", "{{example_id_1}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Lesson Vocabulary Attachment",
+      "item": [
+        {
+          "name": "1. Attach Lexemes to Lesson",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lesson_id\": \"{{lesson_id}}\",\n  \"lexemes\": [\n    {\n      \"lexeme_id\": \"{{lexeme_id_1}}\",\n      \"is_core\": true,\n      \"sort_order\": 1\n    },\n    {\n      \"lexeme_id\": \"{{lexeme_id_2}}\",\n      \"is_core\": true,\n      \"sort_order\": 2\n    },\n    {\n      \"lexeme_id\": \"{{lexeme_id_3}}\",\n      \"is_core\": false,\n      \"sort_order\": 3\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/lessons/attach",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lessons", "attach"]
+            }
+          }
+        },
+        {
+          "name": "2. List Lexemes in Lesson",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/lessons/{{lesson_id}}/lexemes",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "lessons", "{{lesson_id}}", "lexemes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "SRS Review System",
+      "item": [
+        {
+          "name": "1. Get Review Cards for Today",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/review/today?language_id={{language_id}}&limit=20",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "review", "today"],
+              "query": [
+                {
+                  "key": "language_id",
+                  "value": "{{language_id}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "2. Submit Review Result - Perfect (5)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_1}}\",\n  \"rating\": 5,\n  \"source\": \"QUIZ\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/review/result",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "review", "result"]
+            }
+          }
+        },
+        {
+          "name": "3. Submit Review Result - Good (4)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_2}}\",\n  \"rating\": 4,\n  \"source\": \"LISTENING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/review/result",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "review", "result"]
+            }
+          }
+        },
+        {
+          "name": "4. Submit Review Result - OK (3)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_3}}\",\n  \"rating\": 3,\n  \"source\": \"SPEAKING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/review/result",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "review", "result"]
+            }
+          }
+        },
+        {
+          "name": "5. Submit Review Result - Hard (2)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_1}}\",\n  \"rating\": 2,\n  \"source\": \"QUIZ\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/review/result",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "review", "result"]
+            }
+          }
+        },
+        {
+          "name": "6. Submit Review Result - Failed (0)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lexeme_id\": \"{{lexeme_id_2}}\",\n  \"rating\": 0,\n  \"source\": \"WRITING\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/vocab/review/result",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "review", "result"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Weak Words Analysis",
+      "item": [
+        {
+          "name": "Get Weak Words List",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/vocab/weak-words?language_id={{language_id}}&limit=50",
+              "host": ["{{base_url}}"],
+              "path": ["vocab", "weak-words"],
+              "query": [
+                {
+                  "key": "language_id",
+                  "value": "{{language_id}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "language_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "level_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "unit_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lesson_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lexeme_id_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lexeme_id_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "lexeme_id_3",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sense_id_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sense_id_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "sense_id_3",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "example_id_1",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "example_id_2",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "example_id_3",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

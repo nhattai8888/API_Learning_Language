@@ -4,6 +4,7 @@ from sqlalchemy import select, delete
 from sqlalchemy.exc import IntegrityError
 
 from app.features.ai.queue import enqueue_ai_speaking_job
+from app.models.curriculum import Lesson
 from app.models.lesson_engine import LessonItem, LessonItemChoice, LessonAttempt, UserLessonProgress
 from app.core.enums import EntityStatus, LessonItemType, LessonProgressStatus, AttemptStatus
 
@@ -262,12 +263,15 @@ async def submit_attempt(db: AsyncSession, user_id: str, lesson_id: str, attempt
                             "language_hint": language_hint,
                             "reference_text": ref,
                         })
-
+                lesson = await db.get(Lesson, lesson_id)
+                language_id = str(lesson.language_id)
                 await enqueue_ai_speaking_job({
                     "attempt_id": str(attempt.id),
                     "user_id": str(user_id),
                     "items": job_items,
                     "strictness": 75,
+                    "language_id": str(language_id),
+                    
                 })
             except Exception as ai_error:
                 # Log AI job error but don't fail the attempt

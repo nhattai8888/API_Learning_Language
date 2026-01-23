@@ -49,6 +49,7 @@ from app.schemas.lesson_engine import (
     AttemptAIUpdateRequest,
     AttemptAIUpdateResponse,
 )
+from app.schemas.vocabulary import *
 
 __all__ = [
     # common
@@ -95,4 +96,18 @@ __all__ = [
     "AttemptsListResponse",
     "AttemptAIUpdateRequest",
     "AttemptAIUpdateResponse",
+    "LexemeCreate",
+    "LexemeUpdate",
+    "LexemeOut",
+    "SenseCreate",
+    "SenseUpdate",
+    "SenseOut",
+    "ExampleCreate",
+    "ExampleUpdate",
+    "ExampleOut",
+    "AttachLexemesToLessonRequest",
+    "LessonLexemeOut",
+    "ReviewTodayResponse",
+    "ReviewResultRequest",
+    "WeakWordOut",
 ]
