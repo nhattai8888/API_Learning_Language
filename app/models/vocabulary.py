@@ -24,7 +24,7 @@ class Lexeme(Base):
     lemma: Mapped[str] = mapped_column(String(180), nullable=False)
 
     # keep your existing field name
-    phoenic: Mapped[str | None] = mapped_column(String(140))
+    phonetic: Mapped[str | None] = mapped_column(String(140))
     audio_url: Mapped[str | None] = mapped_column(Text)
 
     difficulty: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
