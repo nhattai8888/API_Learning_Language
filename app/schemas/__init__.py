@@ -50,6 +50,28 @@ from app.schemas.lesson_engine import (
     AttemptAIUpdateResponse,
 )
 from app.schemas.vocabulary import *
+from app.schemas.grammar_engine import (
+    GrammarTopicCreate,
+    GrammarTopicUpdate,
+    GrammarTopicOut,
+    GrammarPatternCreate,
+    GrammarPatternUpdate,
+    GrammarPatternOut,
+    GrammarExampleCreate,
+    GrammarExampleUpdate,
+    GrammarExampleOut,
+    GrammarExerciseCreate,
+    GrammarExerciseUpdate,
+    GrammarExerciseOut,
+    GrammarChoiceCreate,
+    GrammarChoiceUpdate,
+    GrammarChoiceOut,
+    AttachGrammarToLessonRequest,
+    LessonGrammarOut,
+    GrammarSessionResponse,
+    GrammarSubmitRequest,
+    GrammarSubmitResponse,
+)
 
 __all__ = [
     # common
@@ -110,4 +132,25 @@ __all__ = [
     "ReviewTodayResponse",
     "ReviewResultRequest",
     "WeakWordOut",
+    # Grammar Engine
+    "GrammarTopicCreate",
+    "GrammarTopicUpdate",
+    "GrammarTopicOut",
+    "GrammarPatternCreate",
+    "GrammarPatternUpdate",
+    "GrammarPatternOut",
+    "GrammarExampleCreate",
+    "GrammarExampleUpdate",
+    "GrammarExampleOut",
+    "GrammarExerciseCreate",
+    "GrammarExerciseUpdate",
+    "GrammarExerciseOut",
+    "GrammarChoiceCreate",
+    "GrammarChoiceUpdate",
+    "GrammarChoiceOut",
+    "AttachGrammarToLessonRequest",
+    "LessonGrammarOut",
+    "GrammarSessionResponse",
+    "GrammarSubmitRequest",
+    "GrammarSubmitResponse",
 ]
