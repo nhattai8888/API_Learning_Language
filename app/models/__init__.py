@@ -25,6 +25,16 @@ from app.models.vocabulary import (
 )
 
 from app.features.review.model import ReviewAttempt, UserReviewSettings
+from app.models.grammar_engine import (
+    GrammarTopic,
+    GrammarPattern,
+    GrammarExample,
+    GrammarExercise,
+    GrammarChoice,
+    LessonGrammarPattern,
+    UserGrammarState,
+    GrammarAttempt,
+)
 
 __all__ = [
     "Base",
@@ -54,4 +64,12 @@ __all__ = [
     "UserWordError",
     "ReviewAttempt",
     "UserReviewSettings",
+    "GrammarTopic",
+    "GrammarPattern",
+    "GrammarExample",
+    "GrammarExercise",
+    "GrammarChoice",
+    "LessonGrammarPattern",
+    "UserGrammarState",
+    "GrammarAttempt",
 ]

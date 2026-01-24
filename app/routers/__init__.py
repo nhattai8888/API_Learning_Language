@@ -5,5 +5,6 @@ from app.routers.lesson_engine import router as lesson_engine_router
 from app.features.ai.router import router as ai_router
 from app.routers.vocabulary import router as vocabulary_router
 from app.features.review.router import router as review_router
+from app.routers.grammar_engine import router as grammar_engine_router
 
-routers = [auth_router, rbac_router, curriculum_router, lesson_engine_router, ai_router, vocabulary_router, review_router]
+routers = [auth_router, rbac_router, curriculum_router, lesson_engine_router, ai_router, vocabulary_router, review_router, grammar_engine_router]

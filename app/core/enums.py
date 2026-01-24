@@ -167,3 +167,25 @@ class ReviewMode(str, enum.Enum):
     LISTENING = "LISTENING"
     SHADOWING = "SHADOWING"
 
+class GrammarStatus(str, enum.Enum):
+    DRAFT = "DRAFT"
+    PUBLISHED = "PUBLISHED"
+    ARCHIVED = "ARCHIVED"
+
+class GrammarDifficulty(str, enum.Enum):
+    EASY = "EASY"
+    MEDIUM = "MEDIUM"
+    HARD = "HARD"
+
+class GrammarExerciseType(str, enum.Enum):
+    MCQ = "MCQ"
+    FILL_BLANK = "FILL_BLANK"
+    REORDER = "REORDER"
+    ERROR_CORRECTION = "ERROR_CORRECTION"
+    TRANSFORM = "TRANSFORM"
+
+class GrammarMastery(str, enum.Enum):
+    NEW = "NEW"
+    LEARNING = "LEARNING"
+    KNOWN = "KNOWN"
+    MASTERED = "MASTERED"
