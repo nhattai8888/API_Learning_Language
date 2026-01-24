@@ -24,6 +24,8 @@ from app.models.vocabulary import (
     UserWordError,
 )
 
+from app.features.review.model import ReviewAttempt, UserReviewSettings
+
 __all__ = [
     "Base",
     "User",
@@ -50,4 +52,6 @@ __all__ = [
     "LessonLexeme",
     "UserLexemeState",
     "UserWordError",
+    "ReviewAttempt",
+    "UserReviewSettings",
 ]

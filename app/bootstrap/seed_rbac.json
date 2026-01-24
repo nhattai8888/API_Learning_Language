@@ -167,6 +167,21 @@
       "code": "VOCAB_WEAK_WORDS",
       "module": "vocab",
       "description": "List weak words"
+    },
+    {
+      "code": "SRS_REVIEW",
+      "module": "review",
+      "description": "Do SRS review"
+    },
+    {
+      "code": "SRS_STATS",
+      "module": "review",
+      "description": "View SRS stats"
+    },
+    {
+      "code": "SRS_SETTINGS",
+      "module": "review",
+      "description": "Update SRS settings"
     }
   ],
   "role_permissions": {

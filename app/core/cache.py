@@ -13,3 +13,11 @@ async def close_redis():
     if redis:
         await redis.close()
         redis = None
+
+async def get_redis():
+    """Get current Redis client"""
+    return redis
+
+# Alias cho middleware
+redis_client = redis
+
