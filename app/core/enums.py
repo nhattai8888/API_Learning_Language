@@ -160,3 +160,10 @@ class Severity(str, enum.Enum):
     GOOD = "GOOD"
     OK = "OK"
     BAD = "BAD"
+    
+class ReviewMode(str, enum.Enum):
+    FLASHCARD = "FLASHCARD"
+    TYPING = "TYPING"
+    LISTENING = "LISTENING"
+    SHADOWING = "SHADOWING"
+

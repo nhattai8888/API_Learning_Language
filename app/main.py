@@ -5,6 +5,7 @@ from app.routers import routers
 from contextlib import asynccontextmanager
 from app.core.cache import init_redis, close_redis
 from app.services.bootstrap_service import bootstrap_all
+from app.features.middleware import setup_middlewares, setup_cors
 
 
 @asynccontextmanager
@@ -26,6 +27,18 @@ app = FastAPI(
     openapi_url="/openapi.json",
     lifespan=lifespan,
 )
+
+# Setup middleware (MUST be before app starts)
+setup_middlewares(
+    app=app,
+    rate_limit_requests_per_minute=60,
+    enable_rate_limit=True,
+    enable_logging=True,
+    enable_security=True,
+)
+
+# Setup CORS
+setup_cors(app, allowed_origins=["*"])
 
 for r in routers:
     app.include_router(r)
