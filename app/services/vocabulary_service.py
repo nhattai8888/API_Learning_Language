@@ -14,7 +14,7 @@ async def create_lexeme(db: AsyncSession, payload):
         language_id=payload.language_id,
         type=payload.type,
         lemma=payload.lemma,
-        phoenic=payload.phoenic,
+        phonetic=payload.phonetic,
         audio_url=payload.audio_url,
         difficulty=payload.difficulty,
         tags=payload.tags,
