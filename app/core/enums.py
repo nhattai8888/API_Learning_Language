@@ -189,3 +189,20 @@ class GrammarMastery(str, enum.Enum):
     LEARNING = "LEARNING"
     KNOWN = "KNOWN"
     MASTERED = "MASTERED"
+    
+class SpeakingTaskType(str, enum.Enum):
+    READ_ALOUD = "READ_ALOUD"        # đọc 1 đoạn / câu
+    REPEAT = "REPEAT"                # nghe và lặp lại
+    QNA = "QNA"                      # trả lời câu hỏi
+    PICTURE_DESC = "PICTURE_DESC"    # mô tả hình (transcript only)
+
+class SpeakingAttemptStatus(str, enum.Enum):
+    STARTED = "STARTED"
+    SUBMITTED = "SUBMITTED"
+    PENDING_AI = "PENDING_AI"
+    SCORED = "SCORED"
+    FAILED = "FAILED"
+
+class SpeakingItemType(str, enum.Enum):
+    PROMPT = "PROMPT"    # item chỉ hiển thị prompt (no scoring)
+    SPEAK = "SPEAK"      # cần ghi âm và chấm

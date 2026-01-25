@@ -72,7 +72,7 @@ from app.schemas.grammar_engine import (
     GrammarSubmitRequest,
     GrammarSubmitResponse,
 )
-
+from app.schemas.speaking_engine import *
 __all__ = [
     # common
     "ApiResponse",
@@ -132,7 +132,6 @@ __all__ = [
     "ReviewTodayResponse",
     "ReviewResultRequest",
     "WeakWordOut",
-    # Grammar Engine
     "GrammarTopicCreate",
     "GrammarTopicUpdate",
     "GrammarTopicOut",
@@ -153,4 +152,15 @@ __all__ = [
     "GrammarSessionResponse",
     "GrammarSubmitRequest",
     "GrammarSubmitResponse",
+    "SpeakingTaskCreate",
+    "SpeakingTaskUpdate",
+    "SpeakingTaskOut",
+    "StartSpeakingAttemptRequest",
+    "StartSpeakingAttemptResponse",
+    "SpeakingAttemptItemOut",
+    "SubmitSpeakingAttemptRequest",
+    "SpeakingAttemptOut",
+    "SpeakingScoreOut",
+    
+    
 ]
