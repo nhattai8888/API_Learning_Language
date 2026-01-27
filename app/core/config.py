@@ -55,4 +55,9 @@ class Settings(BaseSettings):
 
     # Internal AI secret (optional if worker calls service directly)
     AI_INTERNAL_SECRET: str | None = None
+    
+    #Google Drive config
+    GDRIVE_FOLDER_ID: str = ""
+    GSA_JSON_PATH: str = ""
+    SCOPES: list[str] = []
 settings = Settings()

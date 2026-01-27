@@ -1,17 +1,23 @@
 import asyncio
+import base64
 from arq.connections import RedisSettings
 from arq import cron
 from arq.worker import Retry
+import redis
+from sqlalchemy import select
 
 from app.core.config import settings
 from app.core.db import AsyncSessionLocal
-from app.core.enums import WordErrorSource
+from app.core.enums import SpeakingTaskType, WordErrorSource
 from app.features.ai.service import gemini_score_speaking
-from app.features.ai.schemas import SpeakScoreRequest
+from app.features.ai.schemas import AudioInput, SpeakScoreRequest
 from app.features.ai.rate_limit import consume_global, consume_user
+from app.features.media.gdrive import download_file_bytes
 from app.models.curriculum import Lesson
 from app.models.lesson_engine import LessonAttempt
-from app.services.lesson_engine_service import apply_ai_result_and_finalize
+from app.models.speaking_engine import SpeakingAttempt, SpeakingAttemptItem, SpeakingTask
+from app.services.lesson_engine_service import enqueue_ai_speaking_job
+from app.services.speaking_engine import apply_ai_result, mark_failed
 from app.services.vocabulary_service import ingest_speaking_weak_words
 
 # payload format:
@@ -25,83 +31,110 @@ from app.services.vocabulary_service import ingest_speaking_weak_words
 # }
 
 async def ai_score_speaking_job(ctx, payload: dict):
-    redis = ctx["redis"]
-
-    user_id = payload["user_id"]
-    allowed_g = await consume_global(redis, cost=1)
-    allowed_u = await consume_user(redis, user_id=user_id, cost=1)
-
-    if not (allowed_g and allowed_u):
-        # Rate limited -> retry later (do not fail)
-        raise Retry(defer=5)
-
     attempt_id = payload["attempt_id"]
-    strictness = int(payload.get("strictness", 75))
-    items = payload.get("items", [])
+    strictness = int(payload.get("strictness") or 70)
 
-    speak_results = {}
-
-    # Call Gemini per SPEAK item (can parallelize lightly; keep modest to avoid quota spikes)
-    all_word_feedback = []
-    for it in items:
-        req = SpeakScoreRequest(
-            audio_base64=it["audio_base64"],
-            mime_type=it.get("mime_type", "audio/wav"),
-            language_hint=it.get("language_hint"),
-            diarization=False,
-            timestamps=True,
-            reference_text=it["reference_text"],
-            strictness=strictness,
-            return_word_feedback=True,
-        )
-        data = await gemini_score_speaking(req)
-
-        wf = data.get("word_feedback") or []
-        all_word_feedback.extend(wf)
-        
-        # map to lesson-engine ai structure (compatible with /ai-update logic)
-        # here we keep only fields used by apply_ai_result_and_finalize policy
-        speak_results[it["item_id"]] = {
-            "pronunciation": int(data["pronunciation"]),
-            "fluency": int(data["fluency"]),
-            "accuracy": int(data["accuracy"]),
-            "words": wf,
-            "transcript": data.get("transcript"),
-            "tips": data.get("tips") or [],
-        }
-
-    # Finalize attempt in DB (no HTTP hop)
+    if not await _dedupe_job(f"dedupe:speaking:{attempt_id}", ttl_sec=600):
+        return
     async with AsyncSessionLocal() as db:
-        # ✅ 0) derive language_id
-        # best: put language_id into job payload at enqueue-time (recommended)
-        language_id = payload.get("language_id")
+        try:
+            attempt = await db.get(SpeakingAttempt, attempt_id)
+            if not attempt:
+                return
 
-        if not language_id:
-            # fallback: try derive from attempt -> lesson -> language_id
-            attempt = await db.get(LessonAttempt, attempt_id)
-            if attempt:
-                lesson = await db.get(Lesson, attempt.lesson_id)
-                if lesson and getattr(lesson, "language_id", None):
-                    language_id = str(lesson.language_id)
+            task = await db.get(SpeakingTask, str(attempt.task_id))
+            if not task:
+                raise ValueError("TASK_NOT_FOUND")
 
-        # ✅ 1) ingest weak words into vocab (if language_id available)
-        if language_id and all_word_feedback:
-            await ingest_speaking_weak_words(
-                db,
-                user_id=str(payload["user_id"]),
-                language_id=str(language_id),
-                word_feedback=all_word_feedback,
-                source=WordErrorSource.SPEAKING,
-            )
+            task_type: SpeakingTaskType = task.task_type
 
-        # ✅ 2) finalize attempt
-        await apply_ai_result_and_finalize(
-            db,
-            attempt_id=attempt_id,
-            speak_results=speak_results,
-            finalize=True,
-        )
+            items = (await db.execute(
+                select(SpeakingAttemptItem).where(SpeakingAttemptItem.attempt_id == attempt_id)
+            )).scalars().all()
 
+            answers = attempt.answers or {}
+            item_scores: dict[str, dict] = {}
+
+            for it in items:
+                ans = answers.get(str(it.id)) or {}
+                media_id = ans.get("media_id")
+                mime_type = ans.get("audio_mime") or it.audio_mime or "audio/wav"
+                language_hint = ans.get("language_hint")  # optional
+
+                if not media_id:
+                    raise ValueError("AUDIO_BASE64_REQUIRED")
+                media = await db.get(MediaFile, media_id)
+                if not media or media.status != MediaStatus.READY or not media.drive_file_id:
+                    raise ValueError("MEDIA_NOT_READY")
+                audio_bytes = await download_file_bytes(media.drive_file_id)
+                audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
+                # ---- FREE SPEECH: QNA / PICTURE_DESC ----
+                if task_type in (SpeakingTaskType.QNA, SpeakingTaskType.PICTURE_DESC):
+                    # 1) ASR for transcript + timestamps if needed
+                    asr = await gemini_score_speaking(AudioInput(
+                        audio_base64=audio_base64,
+                        mime_type=mime_type,
+                        language_hint=language_hint,
+                        diarization=False,
+                        timestamps=True,
+                    ))
+
+                    transcript = asr.text.strip() if hasattr(asr, "text") else (asr.get("text") or "").strip()
+                    if not transcript:
+                        transcript = " "  # avoid empty
+
+                    # 2) Use scoring API but pass transcript as reference to satisfy schema
+                    score = await gemini_score_speaking(SpeakScoreRequest(
+                        audio_base64=audio_base64,
+                        mime_type=mime_type,
+                        language_hint=language_hint,
+                        diarization=False,
+                        timestamps=True,
+                        reference_text=transcript,   # schema requires; we will ignore accuracy later
+                        strictness=strictness,
+                        return_word_feedback=True,
+                    ))
+
+                    score_dict = score.model_dump() if hasattr(score, "model_dump") else dict(score)
+                    # attach ASR detail for UI
+                    score_dict["_asr"] = asr.model_dump() if hasattr(asr, "model_dump") else dict(asr)
+                    score_dict["_meta"] = {"scoring_mode": "FREE_SPEECH"}
+
+                    item_scores[str(it.id)] = score_dict
+                    continue
+
+                # ---- REFERENCE BASED: READ_ALOUD / REPEAT ----
+                ref = (it.reference_text or "").strip()
+                if not ref:
+                    # fallback: if task mistakenly missing reference, still score as free-speech
+                    ref = " "
+
+                score = await gemini_score_speaking(SpeakScoreRequest(
+                    audio_base64=audio_base64,
+                    mime_type=mime_type,
+                    language_hint=language_hint,
+                    diarization=False,
+                    timestamps=True,
+                    reference_text=ref,
+                    strictness=strictness,
+                    return_word_feedback=True,
+                ))
+
+                score_dict = score.model_dump() if hasattr(score, "model_dump") else dict(score)
+                score_dict["_meta"] = {"scoring_mode": "REFERENCE_BASED"}
+                item_scores[str(it.id)] = score_dict
+
+            await apply_ai_result(db, attempt_id=attempt_id, item_scores=item_scores, task_type=task_type)
+
+        except Exception as e:
+            await mark_failed(db, attempt_id=attempt_id, err={"error": str(e)})
+            raise
+
+async def _dedupe_job(key: str, ttl_sec: int = 300) -> bool:
+    r = redis.from_url(settings.REDIS_URL, decode_responses=True)
+    ok = await r.set(key, "1", nx=True, ex=ttl_sec)
+    await r.close()
+    return bool(ok)
 
 class WorkerSettings:
     redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
@@ -114,7 +147,7 @@ class WorkerSettings:
     # Default retries config
     max_tries = 6
 
-    functions = [ai_score_speaking_job]
+    functions = [ai_score_speaking_job, _dedupe_job]
 
     # optional cron cleanup job if you want here
     # cron_jobs = [cron(...)]

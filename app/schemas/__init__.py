@@ -72,7 +72,14 @@ from app.schemas.grammar_engine import (
     GrammarSubmitRequest,
     GrammarSubmitResponse,
 )
-
+from app.schemas.speaking_engine import *
+from app.features.media.schemas import (
+    MediaProvider,
+    MediaStatus,
+    CreateUploadSessionRequest,
+    CreateUploadSessionResponse,
+    FinalizeUploadRequest
+)
 __all__ = [
     # common
     "ApiResponse",
@@ -132,7 +139,6 @@ __all__ = [
     "ReviewTodayResponse",
     "ReviewResultRequest",
     "WeakWordOut",
-    # Grammar Engine
     "GrammarTopicCreate",
     "GrammarTopicUpdate",
     "GrammarTopicOut",
@@ -153,4 +159,19 @@ __all__ = [
     "GrammarSessionResponse",
     "GrammarSubmitRequest",
     "GrammarSubmitResponse",
+    "SpeakingTaskCreate",
+    "SpeakingTaskUpdate",
+    "SpeakingTaskOut",
+    "StartSpeakingAttemptRequest",
+    "StartSpeakingAttemptResponse",
+    "SpeakingAttemptItemOut",
+    "SubmitSpeakingAttemptRequest",
+    "SpeakingAttemptOut",
+    "SpeakingScoreOut",
+    "MediaProvider",
+    "MediaStatus",
+    "CreateUploadSessionRequest",
+    "CreateUploadSessionResponse",
+    "FinalizeUploadRequest",
+    
 ]

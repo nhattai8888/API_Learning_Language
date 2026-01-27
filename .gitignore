@@ -15,3 +15,8 @@ ERD.png
 /bootstrap
 
 Module Learning Language.docx
+
+client_secret_*.json
+
+__pycache__/
+*.pyc

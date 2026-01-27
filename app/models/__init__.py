@@ -36,6 +36,7 @@ from app.models.grammar_engine import (
     GrammarAttempt,
 )
 
+from app.models.speaking_engine import (SpeakingTask, SpeakingAttempt, SpeakingAttemptItem)
 __all__ = [
     "Base",
     "User",
@@ -72,4 +73,7 @@ __all__ = [
     "LessonGrammarPattern",
     "UserGrammarState",
     "GrammarAttempt",
+    "SpeakingTask",
+    "SpeakingAttempt", 
+    "SpeakingAttemptItem",
 ]

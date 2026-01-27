@@ -4,6 +4,8 @@ from google import genai
 from app.core.config import settings
 from app.features.ai.prompts import ASR_SYSTEM, ASR_USER, SCORE_SYSTEM, SCORE_USER
 
+
+
 def _client() -> genai.Client:
     # SDK tự pick từ env GEMINI_API_KEY, nhưng ta vẫn đảm bảo settings có
     return genai.Client(api_key=settings.GEMINI_API_KEY)
