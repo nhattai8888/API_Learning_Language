@@ -72,7 +72,7 @@ class StartSpeakingAttemptResponse(BaseModel):
 class SubmitSpeakingAttemptItem(BaseModel):
     item_id: UUID
     audio_url: Optional[str] = None
-    audio_base64: Optional[str] = None  # if you allow direct upload
+    media_id: Optional[str] = None  # if you allow direct upload
     audio_mime: str = "audio/wav"
     duration_ms: int = 0
 

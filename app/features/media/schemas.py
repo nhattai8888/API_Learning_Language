@@ -1,12 +1,13 @@
+import enum
 from pydantic import BaseModel, Field
 from typing import Optional, Dict, Any
 from uuid import UUID
 from datetime import datetime
 
-class MediaProvider(str):
+class MediaProvider(enum.Enum):
     GDRIVE = "GDRIVE"
 
-class MediaStatus(str):
+class MediaStatus(enum.Enum):
     INIT = "INIT"
     UPLOADING = "UPLOADING"
     READY = "READY"

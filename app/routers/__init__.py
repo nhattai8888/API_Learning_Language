@@ -7,5 +7,5 @@ from app.routers.vocabulary import router as vocabulary_router
 from app.features.review.router import router as review_router
 from app.routers.grammar_engine import router as grammar_engine_router
 from app.routers.speaking_engine import router as speaking_engine_router
-
-routers = [auth_router, rbac_router, curriculum_router, lesson_engine_router, ai_router, vocabulary_router, review_router, grammar_engine_router, speaking_engine_router]
+from app.features.media.router import router as media_router 
+routers = [auth_router, rbac_router, curriculum_router, lesson_engine_router, ai_router, vocabulary_router, review_router, grammar_engine_router, speaking_engine_router,media_router]

@@ -133,12 +133,12 @@ async def submit_attempt(db: AsyncSession, user_id: str, attempt_id: str, payloa
         # ✅ MUST store audio_base64 for worker (Gemini SDK needs bytes)
         answers[str(item.id)] = {
             "audio_url": it.audio_url,
-            "audio_base64": it.audio_base64,   # <— important
+            "media_id": str(it.media_id) if it.media_id else None,   # <— important
             "audio_mime": it.audio_mime,
             "duration_ms": it.duration_ms,
         }
 
-        if it.audio_base64:
+        if it.media_id:
             need_ai = True
 
     attempt.answers = answers

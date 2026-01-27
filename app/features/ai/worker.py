@@ -1,7 +1,9 @@
 import asyncio
+import base64
 from arq.connections import RedisSettings
 from arq import cron
 from arq.worker import Retry
+import redis
 from sqlalchemy import select
 
 from app.core.config import settings
@@ -10,6 +12,7 @@ from app.core.enums import SpeakingTaskType, WordErrorSource
 from app.features.ai.service import gemini_score_speaking
 from app.features.ai.schemas import AudioInput, SpeakScoreRequest
 from app.features.ai.rate_limit import consume_global, consume_user
+from app.features.media.gdrive import download_file_bytes
 from app.models.curriculum import Lesson
 from app.models.lesson_engine import LessonAttempt
 from app.models.speaking_engine import SpeakingAttempt, SpeakingAttemptItem, SpeakingTask
@@ -31,6 +34,8 @@ async def ai_score_speaking_job(ctx, payload: dict):
     attempt_id = payload["attempt_id"]
     strictness = int(payload.get("strictness") or 70)
 
+    if not await _dedupe_job(f"dedupe:speaking:{attempt_id}", ttl_sec=600):
+        return
     async with AsyncSessionLocal() as db:
         try:
             attempt = await db.get(SpeakingAttempt, attempt_id)
@@ -52,13 +57,17 @@ async def ai_score_speaking_job(ctx, payload: dict):
 
             for it in items:
                 ans = answers.get(str(it.id)) or {}
-                audio_base64 = ans.get("audio_base64")
+                media_id = ans.get("media_id")
                 mime_type = ans.get("audio_mime") or it.audio_mime or "audio/wav"
                 language_hint = ans.get("language_hint")  # optional
 
-                if not audio_base64:
+                if not media_id:
                     raise ValueError("AUDIO_BASE64_REQUIRED")
-
+                media = await db.get(MediaFile, media_id)
+                if not media or media.status != MediaStatus.READY or not media.drive_file_id:
+                    raise ValueError("MEDIA_NOT_READY")
+                audio_bytes = await download_file_bytes(media.drive_file_id)
+                audio_base64 = base64.b64encode(audio_bytes).decode("utf-8")
                 # ---- FREE SPEECH: QNA / PICTURE_DESC ----
                 if task_type in (SpeakingTaskType.QNA, SpeakingTaskType.PICTURE_DESC):
                     # 1) ASR for transcript + timestamps if needed
@@ -121,6 +130,11 @@ async def ai_score_speaking_job(ctx, payload: dict):
             await mark_failed(db, attempt_id=attempt_id, err={"error": str(e)})
             raise
 
+async def _dedupe_job(key: str, ttl_sec: int = 300) -> bool:
+    r = redis.from_url(settings.REDIS_URL, decode_responses=True)
+    ok = await r.set(key, "1", nx=True, ex=ttl_sec)
+    await r.close()
+    return bool(ok)
 
 class WorkerSettings:
     redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
@@ -133,7 +147,7 @@ class WorkerSettings:
     # Default retries config
     max_tries = 6
 
-    functions = [ai_score_speaking_job]
+    functions = [ai_score_speaking_job, _dedupe_job]
 
     # optional cron cleanup job if you want here
     # cron_jobs = [cron(...)]
