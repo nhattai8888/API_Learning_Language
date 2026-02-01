@@ -60,16 +60,17 @@ class SecurityMiddleware(BaseHTTPMiddleware):
                     content={"detail": "Forbidden - Suspicious request pattern"}
                 )
 
-        # 2. Kiểm tra CSRF cho non-GET requests
-        if self.enable_csrf and request.method in ["POST", "PUT", "DELETE", "PATCH"]:
-            if not self._verify_csrf(request):
-                logger.warning(
-                    f"CSRF validation failed for {request.method} {request.url.path}"
-                )
-                return JSONResponse(
-                    status_code=403,
-                    content={"detail": "CSRF validation failed"}
-                )
+        # 2. CSRF validation is disabled
+        # Uncomment the following lines to enable CSRF protection:
+        # if self.enable_csrf and request.method in ["POST", "PUT", "DELETE", "PATCH"]:
+        #     if not self._verify_csrf(request):
+        #         logger.warning(
+        #             f"CSRF validation failed for {request.method} {request.url.path}"
+        #         )
+        #         return JSONResponse(
+        #             status_code=403,
+        #             content={"detail": "CSRF validation failed"}
+        #         )
 
         # 3. Gọi endpoint
         response = await call_next(request)

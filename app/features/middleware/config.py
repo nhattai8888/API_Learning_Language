@@ -20,7 +20,7 @@ class MiddlewareConfig:
     # Security Middleware
     SECURITY_ENABLED = True
     SECURITY_CHECK_SQL_INJECTION = True
-    SECURITY_ENABLE_CSRF = True
+    SECURITY_ENABLE_CSRF = False  # CSRF validation disabled
     SECURITY_ALLOWED_ORIGINS = ["*"]  # Nên thay đổi trong production
     SECURITY_WHITELIST_PATHS = ["/health", "/docs", "/redoc", "/openapi.json"]
     
