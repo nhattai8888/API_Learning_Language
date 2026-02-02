@@ -1,0 +1,149 @@
+{
+  "generated_at": "2026-02-01T00:00:00Z",
+  "note": "Paths are router prefix + route (e.g. /auth/login/email). Methods are HTTP verbs.",
+  "mappings": {
+    "TokenPair": [
+      {"method": "POST", "path": "/auth/otp/verify"},
+      {"method": "POST", "path": "/auth/refresh"}
+    ],
+    "MeResponse": [
+      {"method": "GET", "path": "/auth/me"}
+    ],
+    "RoleOut": [
+      {"method": "POST", "path": "/rbac/roles"},
+      {"method": "GET", "path": "/rbac/roles"}
+    ],
+    "PermissionOut": [
+      {"method": "POST", "path": "/rbac/permissions"},
+      {"method": "GET", "path": "/rbac/permissions"}
+    ],
+    "LanguageOut": [
+      {"method": "GET", "path": "/curriculum/languages"},
+      {"method": "GET", "path": "/curriculum/languages/{language_id}"}
+    ],
+    "LevelOut": [
+      {"method": "GET", "path": "/curriculum/levels/by-language/{language_id}"}
+    ],
+    "UnitOut": [
+      {"method": "GET", "path": "/curriculum/units/by-language/{language_id}"}
+    ],
+    "LessonOut": [
+      {"method": "GET", "path": "/curriculum/lessons/by-unit/{unit_id}"}
+    ],
+    "GrammarTopicOut": [
+      {"method": "POST", "path": "/grammar/topics"},
+      {"method": "PATCH", "path": "/grammar/topics/{topic_id}"},
+      {"method": "GET", "path": "/grammar/topics/{topic_id}"},
+      {"method": "GET", "path": "/grammar/topics"}
+    ],
+    "GrammarPatternOut": [
+      {"method": "POST", "path": "/grammar/patterns"},
+      {"method": "PATCH", "path": "/grammar/patterns/{pattern_id}"},
+      {"method": "GET", "path": "/grammar/patterns/{pattern_id}"},
+      {"method": "GET", "path": "/grammar/patterns"}
+    ],
+    "GrammarExampleOut": [
+      {"method": "POST", "path": "/grammar/examples"},
+      {"method": "PATCH", "path": "/grammar/examples/{example_id}"},
+      {"method": "GET", "path": "/grammar/examples/by-pattern/{pattern_id}"}
+    ],
+    "GrammarExerciseOut": [
+      {"method": "POST", "path": "/grammar/exercises"},
+      {"method": "PATCH", "path": "/grammar/exercises/{exercise_id}"},
+      {"method": "GET", "path": "/grammar/exercises/{exercise_id}"},
+      {"method": "GET", "path": "/grammar/exercises/by-pattern/{pattern_id}"}
+    ],
+    "GrammarChoiceOut": [
+      {"method": "POST", "path": "/grammar/choices"},
+      {"method": "PATCH", "path": "/grammar/choices/{choice_id}"},
+      {"method": "GET", "path": "/grammar/choices/by-exercise/{exercise_id}"}
+    ],
+    "GrammarSessionResponse": [
+      {"method": "GET", "path": "/grammar/session"}
+    ],
+    "GrammarSubmitResponse": [
+      {"method": "POST", "path": "/grammar/session/submit"}
+    ],
+    "LessonItemOut": [
+      {"method": "POST", "path": "/lesson-engine/items"},
+      {"method": "PATCH", "path": "/lesson-engine/items/{item_id}"},
+      {"method": "GET", "path": "/lesson-engine/items/by-lesson/{lesson_id}"}
+    ],
+    "AttemptStartResponse": [
+      {"method": "POST", "path": "/lesson-engine/lessons/{lesson_id}/attempts/start"}
+    ],
+    "AttemptSubmitResponse": [
+      {"method": "POST", "path": "/lesson-engine/lessons/{lesson_id}/attempts/{attempt_id}/submit"}
+    ],
+    "SpeakingTaskOut": [
+      {"method": "POST", "path": "/speaking/tasks"},
+      {"method": "PATCH", "path": "/speaking/tasks/{task_id}"},
+      {"method": "GET", "path": "/speaking/tasks"},
+      {"method": "GET", "path": "/speaking/tasks/{task_id}"}
+    ],
+    "StartSpeakingAttemptResponse": [
+      {"method": "POST", "path": "/speaking/attempts/start"}
+    ],
+    "SpeakingScoreOut": [
+      {"method": "POST", "path": "/speaking/attempts/{attempt_id}/submit"},
+      {"method": "GET", "path": "/speaking/attempts/{attempt_id}/score"}
+    ],
+    "SpeakingAttemptOut": [
+      {"method": "GET", "path": "/speaking/attempts/{attempt_id}"}
+    ],
+    "LexemeOut": [
+      {"method": "POST", "path": "/vocab/lexemes"},
+      {"method": "PATCH", "path": "/vocab/lexemes/{lexeme_id}"},
+      {"method": "GET", "path": "/vocab/lexemes/{lexeme_id}"},
+      {"method": "GET", "path": "/vocab/lexemes"}
+    ],
+    "SenseOut": [
+      {"method": "POST", "path": "/vocab/senses"},
+      {"method": "PATCH", "path": "/vocab/senses/{sense_id}"},
+      {"method": "GET", "path": "/vocab/senses/by-lexeme/{lexeme_id}"}
+    ],
+    "ExampleOut": [
+      {"method": "POST", "path": "/vocab/examples"},
+      {"method": "PATCH", "path": "/vocab/examples/{example_id}"},
+      {"method": "GET", "path": "/vocab/examples/by-sense/{sense_id}"}
+    ],
+    "LessonLexemeOut": [
+      {"method": "POST", "path": "/vocab/lessons/attach"},
+      {"method": "GET", "path": "/vocab/lessons/{lesson_id}/lexemes"}
+    ],
+    "ReviewTodayResponse": [
+      {"method": "GET", "path": "/vocab/review/today"},
+      {"method": "GET", "path": "/review/today"}
+    ],
+    "WeakWordOut": [
+      {"method": "GET", "path": "/vocab/weak-words"}
+    ],
+    "ReviewSettingsOut": [
+      {"method": "GET", "path": "/review/settings"},
+      {"method": "POST", "path": "/review/settings"}
+    ],
+    "ReviewSubmitResponse": [
+      {"method": "POST", "path": "/review/submit"}
+    ],
+    "ReviewStatsResponse": [
+      {"method": "GET", "path": "/review/stats"}
+    ],
+    "ReviewSessionResponse": [
+      {"method": "GET", "path": "/review/session"}
+    ],
+    "CreateUploadSessionResponse": [
+      {"method": "POST", "path": "/media/gdrive/upload-session"}
+    ],
+    "MediaOut": [
+      {"method": "POST", "path": "/media/gdrive/finalize"},
+      {"method": "GET", "path": "/media/{media_id}"},
+      {"method": "GET", "path": "/media"}
+    ],
+    "ASRResponse": [
+      {"method": "POST", "path": "/ai/asr/transcribe"}
+    ],
+    "ScoreResponse": [
+      {"method": "POST", "path": "/ai/speaking/score"}
+    ]
+  }
+}

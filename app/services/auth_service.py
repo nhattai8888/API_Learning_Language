@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 
-from app.core.enums import IdentityType, IdentityStatus, UserStatus, OtpPurpose, OtpChannel, SessionStatus
+from app.core.enums import IdentityType, IdentityStatus, UserStatus, OtpPurpose, OtpChannel, SessionStatus, ResetStatus
 from app.core.security import hash_password_async, verify_password_async, needs_rehash_async
 from app.core.cache import redis
 from app.models.rbac import Role, UserRole
@@ -11,6 +11,9 @@ from app.models.user import User
 from app.models.auth import UserIdentity, AuthSession
 from app.services.token_service import create_access_token, create_refresh_token, hash_refresh_token, refresh_expires_at
 from app.services.otp_service import create_and_send_otp
+from app.models.auth import TrustedDevice, PasswordReset, OtpChallenge
+from app.core.security import sha256_hex, random_token_urlsafe
+from datetime import timedelta
 
 async def _get_identity(db: AsyncSession, identity_type: IdentityType, value: str) -> UserIdentity | None:
     try:
@@ -248,3 +251,113 @@ async def invalidate_rbac_cache(user_id: str):
     except Exception as e:
         # Log but don't fail - cache invalidation is non-critical
         print(f"[WARN] INVALIDATE_RBAC_CACHE_FAILED: {str(e)}")
+
+
+async def create_trusted_device(db: AsyncSession, user_id: str, device_id: str | None, device_fingerprint: str | None, days: int = 30):
+    try:
+        now = datetime.now(timezone.utc)
+        trusted_until = now + timedelta(days=days)
+
+        # try update existing by device_id or fingerprint
+        stmt = None
+        existing = None
+        if device_id:
+            existing = await db.execute(select(TrustedDevice).where(TrustedDevice.user_id == user_id, TrustedDevice.device_id == device_id))
+            existing = existing.scalar_one_or_none()
+
+        if not existing and device_fingerprint:
+            existing = await db.execute(select(TrustedDevice).where(TrustedDevice.user_id == user_id, TrustedDevice.device_fingerprint == device_fingerprint))
+            existing = existing.scalar_one_or_none()
+
+        if existing:
+            existing.trusted_until = trusted_until
+            await db.commit()
+            return existing
+
+        td = TrustedDevice(user_id=user_id, device_id=device_id or "", device_fingerprint=device_fingerprint, trusted_until=trusted_until)
+        db.add(td)
+        await db.commit()
+        await db.refresh(td)
+        return td
+    except Exception as e:
+        await db.rollback()
+        raise ValueError(f"CREATE_TRUSTED_DEVICE_FAILED: {str(e)}") from e
+
+
+async def biometric_login(db: AsyncSession, device_id: str | None, device_fingerprint: str | None, user_agent: str | None, ip: str | None):
+    try:
+        now = datetime.now(timezone.utc)
+        td = None
+        if device_id:
+            td = (await db.execute(select(TrustedDevice).where(TrustedDevice.device_id == device_id, TrustedDevice.trusted_until >= now))).scalar_one_or_none()
+        if not td and device_fingerprint:
+            td = (await db.execute(select(TrustedDevice).where(TrustedDevice.device_fingerprint == device_fingerprint, TrustedDevice.trusted_until >= now))).scalar_one_or_none()
+
+        if not td:
+            raise ValueError("TRUSTED_DEVICE_NOT_FOUND_OR_EXPIRED")
+
+        # Issue tokens for the associated user
+        tokens = await issue_tokens(db, user_id=str(td.user_id), device_id=td.device_id, user_agent=user_agent, ip=ip, rotated_from=None)
+        return tokens
+    except ValueError:
+        await db.rollback()
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise ValueError(f"BIOMETRIC_LOGIN_FAILED: {str(e)}") from e
+
+
+async def forgot_password_start(db: AsyncSession, identity_type: IdentityType, value: str) -> str:
+    try:
+        identity = await _get_identity(db, identity_type, value)
+        if not identity:
+            raise ValueError("IDENTITY_NOT_FOUND")
+
+        token = random_token_urlsafe(16)
+        token_hash = sha256_hex(token)
+        now = datetime.now(timezone.utc)
+        expires_at = now + timedelta(minutes=60)
+
+        pr = PasswordReset(user_id=identity.user_id, identity_id=identity.id, status=ResetStatus.PENDING, token_hash=token_hash, expires_at=expires_at)
+        db.add(pr)
+        await db.commit()
+        await db.refresh(pr)
+
+        # In production send token via email/SMS. Return token for debug/testing
+        return token
+    except IntegrityError as e:
+        await db.rollback()
+        raise ValueError("FORGOT_PASSWORD_INTEGRITY_ERROR") from e
+    except Exception as e:
+        await db.rollback()
+        raise ValueError(f"FORGOT_PASSWORD_START_FAILED: {str(e)}") from e
+
+
+async def reset_password_confirm(db: AsyncSession, token: str, new_password: str):
+    try:
+        token_hash = sha256_hex(token)
+        now = datetime.now(timezone.utc)
+        stmt = select(PasswordReset).where(PasswordReset.token_hash == token_hash, PasswordReset.status == ResetStatus.PENDING)
+        pr = (await db.execute(stmt)).scalar_one_or_none()
+        if not pr:
+            raise ValueError("INVALID_OR_USED_TOKEN")
+        if pr.expires_at <= now:
+            pr.status = ResetStatus.EXPIRED
+            await db.commit()
+            raise ValueError("TOKEN_EXPIRED")
+
+        user = (await db.execute(select(User).where(User.id == pr.user_id))).scalar_one_or_none()
+        if not user:
+            raise ValueError("USER_NOT_FOUND")
+
+        user.password_hash = await hash_password_async(new_password)
+        pr.status = ResetStatus.USED
+        pr.used_at = now
+        await db.commit()
+        return True
+    except ValueError:
+        await db.rollback()
+        raise
+    except Exception as e:
+        await db.rollback()
+        raise ValueError(f"RESET_PASSWORD_FAILED: {str(e)}") from e

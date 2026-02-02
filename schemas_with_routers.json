@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-02-01T00:00:00Z",
+  "summary": "Mapping of Pydantic schemas to their fields and routers that reference them (module-level).",
+  "schemas": {
+    "TokenPair": {
+      "fields": {
+        "access_token": "str",
+        "refresh_token": "str",
+        "token_type": "str (default: 'bearer')"
+      },
+      "used_in_routers": ["app/routers/auth.py"]
+    },
+    "MeResponse": {
+      "fields": {
+        "user_id": "str",
+        "display_name": "Optional[str]",
+        "roles": "List[str] (default: [])",
+        "permissions": "List[str] (default: [])"
+      },
+      "used_in_routers": ["app/routers/auth.py"]
+    },
+    "RoleOut": {
+      "fields": {"id": "str","code": "str","name": "str","status": "str"},
+      "used_in_routers": ["app/routers/rbac.py"]
+    },
+    "PermissionOut": {
+      "fields": {"id": "str","code": "str","module": "str","description": "Optional[str]","status": "str"},
+      "used_in_routers": ["app/routers/rbac.py"]
+    },
+    "LanguageOut": {
+      "fields": {"id": "UUID","code": "str","name": "str","script": "Optional[str]"},
+      "used_in_routers": ["app/routers/curriculum.py"]
+    },
+    "LevelOut": {
+      "fields": {"id": "UUID","language_id": "UUID","code": "str","name": "str","sort_order": "int"},
+      "used_in_routers": ["app/routers/curriculum.py"]
+    },
+    "UnitOut": {
+      "fields": {"id": "UUID","language_id": "UUID","level_id": "Optional[UUID]","title": "str","description": "Optional[str]","sort_order": "int"},
+      "used_in_routers": ["app/routers/curriculum.py"]
+    },
+    "LessonOut": {
+      "fields": {"id": "UUID","language_id": "UUID","unit_id": "Optional[UUID]","title": "str","objective": "Optional[str]","estimated_minutes": "int","lesson_type": "LessonType","publish_status": "PublishStatus","version": "int","slug": "str","sort_order": "int"},
+      "used_in_routers": ["app/routers/curriculum.py"]
+    },
+    "GrammarTopicOut": {
+      "fields": {"id": "UUID","language_id": "UUID","title": "str","slug": "str","description": "Optional[str]","sort_order": "int","status": "GrammarStatus","created_at": "datetime"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "GrammarPatternOut": {
+      "fields": {"id": "UUID","language_id": "UUID","topic_id": "Optional[UUID]","title": "str","short_rule": "Optional[str]","full_explanation": "Optional[str]","formula": "Optional[Dict]","common_mistakes": "Optional[Dict]","tags": "Optional[Dict]","difficulty": "GrammarDifficulty","status": "GrammarStatus","created_at": "datetime","updated_at": "datetime"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "GrammarExampleOut": {
+      "fields": {"id": "UUID","pattern_id": "UUID","sentence": "str","translation": "Optional[Dict]","audio_url": "Optional[str]","highlight": "Optional[Dict]","created_at": "datetime"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "GrammarExerciseOut": {
+      "fields": {"id": "UUID","pattern_id": "UUID","exercise_type": "GrammarExerciseType","prompt": "str","data": "Optional[Dict]","answer": "Optional[Dict]","explanation": "Optional[str]","difficulty": "GrammarDifficulty","created_at": "datetime"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "GrammarChoiceOut": {
+      "fields": {"id": "UUID","exercise_id": "UUID","text": "str","is_correct": "bool","sort_order": "int"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "GrammarSessionResponse": {
+      "fields": {"session_id": "str","items": "List[GrammarSessionItem]","total": "int"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "GrammarSubmitResponse": {
+      "fields": {"updated": "List[GrammarSubmitResultItem]","count": "int"},
+      "used_in_routers": ["app/routers/grammar_engine.py"]
+    },
+    "LessonItemOut": {
+      "fields": {"id": "UUID","lesson_id": "UUID","item_type": "LessonItemType","prompt": "Optional[str]","content": "Optional[Dict]","points": "int","sort_order": "int","status": "str","choices": "Optional[List[ChoiceOut]]"},
+      "used_in_routers": ["app/routers/lesson_engine.py"]
+    },
+    "AttemptStartResponse": {
+      "fields": {"attempt_id": "UUID","lesson_id": "UUID","items": "List[LessonItemOut]"},
+      "used_in_routers": ["app/routers/lesson_engine.py"]
+    },
+    "AttemptSubmitResponse": {
+      "fields": {"attempt_id": "UUID","status": "AttemptStatus","score_points": "int","max_points": "int","score_percent": "int","results": "List[ItemResult]"},
+      "used_in_routers": ["app/routers/lesson_engine.py"]
+    },
+    "SpeakingTaskOut": {
+      "fields": {"id": "UUID","language_id": "UUID","task_type": "SpeakingTaskType","title": "str","prompt_text": "Optional[str]","prompt_audio_url": "Optional[str]","reference_text": "Optional[str]","picture_url": "Optional[str]","difficulty": "int","tags": "Optional[Dict]","status": "str","created_at": "datetime"},
+      "used_in_routers": ["app/routers/speaking_engine.py"]
+    },
+    "StartSpeakingAttemptResponse": {
+      "fields": {"attempt_id": "UUID","task_id": "UUID","status": "SpeakingAttemptStatus","items": "List[SpeakingAttemptItemOut]"},
+      "used_in_routers": ["app/routers/speaking_engine.py"]
+    },
+    "SpeakingAttemptOut": {
+      "fields": {"id": "UUID","user_id": "UUID","language_id": "UUID","task_id": "UUID","status": "SpeakingAttemptStatus","duration_sec": "int","submitted_at": "Optional[datetime]","score_percent": "int","ai_result": "Optional[Dict]","created_at": "datetime","updated_at": "datetime"},
+      "used_in_routers": ["app/routers/speaking_engine.py"]
+    },
+    "SpeakingScoreOut": {
+      "fields": {"attempt_id": "UUID","status": "SpeakingAttemptStatus","score_percent": "int","ai_result": "Optional[Dict]","error": "Optional[Dict]"},
+      "used_in_routers": ["app/routers/speaking_engine.py"]
+    },
+    "LexemeOut": {
+      "fields": {"id": "UUID","language_id": "UUID","type": "LexemeType","lemma": "str","phoenic": "Optional[str]","audio_url": "Optional[str]","difficulty": "int","tags": "Optional[Dict]","status": "EntityStatus","created_at": "datetime","updated_at": "datetime"},
+      "used_in_routers": ["app/routers/vocabulary.py"]
+    },
+    "SenseOut": {
+      "fields": {"id": "UUID","lexeme_id": "UUID","sense_index": "int","definition": "str","domain": "WordDomain","cefr_level": "Optional[str]","translations": "Optional[Dict]","collocations": "Optional[Dict]","status": "PublishStatus","created_at": "datetime","updated_at": "datetime"},
+      "used_in_routers": ["app/routers/vocabulary.py"]
+    },
+    "ExampleOut": {
+      "fields": {"id": "UUID","sense_id": "UUID","sentence": "str","translation": "Optional[Dict]","audio_url": "Optional[str]","difficulty": "int","tags": "Optional[Dict]","created_at": "datetime"},
+      "used_in_routers": ["app/routers/vocabulary.py"]
+    },
+    "LessonLexemeOut": {
+      "fields": {"lesson_id": "UUID","lexeme_id": "UUID","is_core": "bool","sort_order": "int"},
+      "used_in_routers": ["app/routers/vocabulary.py"]
+    },
+    "ReviewTodayResponse": {
+      "fields": {"items": "List[ReviewCard]","total": "int","due_count": "int (feature variant)","new_count": "int (feature variant)"},
+      "used_in_routers": ["app/routers/vocabulary.py","app/features/review/router.py"]
+    },
+    "WeakWordOut": {
+      "fields": {"lexeme_id": "UUID","lemma": "str","type": "LexemeType","severity": "Severity","error_type": "WordErrorType","occur_count": "int","last_occurred_at": "datetime","evidence": "Optional[Dict]"},
+      "used_in_routers": ["app/routers/vocabulary.py"]
+    },
+    "ReviewSettingsOut": {
+      "fields": {"language_id": "UUID","daily_new_limit": "int","daily_review_limit": "int"},
+      "used_in_routers": ["app/features/review/router.py"]
+    },
+    "ReviewSubmitResponse": {
+      "fields": {"updated": "List[ReviewSubmitResultItem]","count": "int"},
+      "used_in_routers": ["app/features/review/router.py"]
+    },
+    "ReviewStatsResponse": {
+      "fields": {"language_id": "UUID","due_now": "int","scheduled_total": "int","mastered": "int","learning": "int","avg_familiarity": "int","reviewed_7d": "int"},
+      "used_in_routers": ["app/features/review/router.py"]
+    },
+    "ReviewSessionResponse": {
+      "fields": {"session_id": "str","mode": "ReviewMode","items": "List[ReviewSessionItem]","total": "int"},
+      "used_in_routers": ["app/features/review/router.py"]
+    },
+    "CreateUploadSessionResponse": {
+      "fields": {"upload_url": "str","media_id": "UUID","provider": "str (default: 'GDRIVE')","status": "str (default: 'UPLOADING')"},
+      "used_in_routers": ["app/features/media/router.py"]
+    },
+    "MediaOut": {
+      "fields": {"id": "UUID","provider": "str","status": "str","file_name": "str","mime_type": "str","size_bytes": "int","drive_file_id": "Optional[str]","drive_view_url": "Optional[str]","created_at": "datetime"},
+      "used_in_routers": ["app/features/media/router.py"]
+    },
+    "ASRResponse": {
+      "fields": {"text": "str","words": "Optional[List[TranscriptWord]]","segments": "Optional[List[TranscriptSegment]]","detected_language": "Optional[str]"},
+      "used_in_routers": ["app/features/ai/router.py"]
+    },
+    "ScoreResponse": {
+      "fields": {"transcript": "str","pronunciation": "int","fluency": "int","accuracy": "int","overall": "int","wpm": "Optional[int]","pauses": "Optional[Dict]","word_feedback": "Optional[List[WordFeedback]]","tips": "List[str] (default: [])","warnings": "Optional[List[str]"},
+      "used_in_routers": ["app/features/ai/router.py"]
+    }
+  }
+}

@@ -8,6 +8,7 @@ from app.schemas.auth import (
     LoginEmailRequest, LoginPhoneStartRequest, OtpVerifyRequest,
     RefreshRequest, TokenPair
 )
+from app.schemas.auth import BiometricLoginRequest, ForgotPasswordStartRequest, ResetPasswordConfirmRequest
 from app.services import auth_service
 from app.services.otp_service import verify_otp
 from app.models.auth import UserIdentity
@@ -71,6 +72,10 @@ async def otp_verify(payload: OtpVerifyRequest, request: Request, db: AsyncSessi
             ip=request.client.host if request.client else None,
             rotated_from=None,
         )
+        # If client requested to trust this device, create trusted device record
+        if payload.trust_device:
+            # use otp.device_fingerprint if provided in OTP creation
+            await auth_service.create_trusted_device(db, user_id=user_id, device_id=payload.device_id, device_fingerprint=otp.device_fingerprint)
         return ApiResponse(data=TokenPair(access_token=tokens["access_token"], refresh_token=tokens["refresh_token"]), message="Verified")
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -82,6 +87,37 @@ async def refresh(payload: RefreshRequest, db: AsyncSession = Depends(get_db)):
         return ApiResponse(data=TokenPair(access_token=tokens["access_token"], refresh_token=tokens["refresh_token"]), message="Refreshed")
     except ValueError as e:
         raise HTTPException(status_code=401, detail=str(e))
+
+
+@router.post("/biometric/login", response_model=ApiResponse[TokenPair])
+async def biometric_login(payload: BiometricLoginRequest, request: Request, db: AsyncSession = Depends(get_db)):
+    """
+    Login using a trusted device (biometric check performed on client).
+    The server validates device_id/device_fingerprint against `trusted_devices` and issues tokens.
+    """
+    try:
+        tokens = await auth_service.biometric_login(db, device_id=payload.device_id, device_fingerprint=payload.device_fingerprint, user_agent=request.headers.get("user-agent"), ip=request.client.host if request.client else None)
+        return ApiResponse(data=TokenPair(access_token=tokens["access_token"], refresh_token=tokens["refresh_token"]), message="OK")
+    except ValueError as e:
+        raise HTTPException(status_code=401, detail=str(e))
+
+
+@router.post("/forgot_password/start", response_model=ApiResponse[dict])
+async def forgot_password_start(payload: ForgotPasswordStartRequest, db: AsyncSession = Depends(get_db)):
+    try:
+        token = await auth_service.forgot_password_start(db, payload.identity_type, payload.value)
+        return ApiResponse(data={"reset_token": token}, message="Password reset token created")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@router.post("/forgot_password/confirm", response_model=ApiResponse[dict])
+async def forgot_password_confirm(payload: ResetPasswordConfirmRequest, db: AsyncSession = Depends(get_db)):
+    try:
+        await auth_service.reset_password_confirm(db, payload.token, payload.new_password)
+        return ApiResponse(data={}, message="Password reset")
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.post("/logout", response_model=ApiResponse[dict])
 async def logout(payload: LogoutRequest, user_id: str = Depends(get_current_user_id), db: AsyncSession = Depends(get_db)):

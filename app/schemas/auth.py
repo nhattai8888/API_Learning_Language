@@ -22,6 +22,10 @@ class LoginPhoneStartRequest(BaseModel):
     device_id: Optional[str] = None
     device_fingerprint: Optional[str] = None
 
+class BiometricLoginRequest(BaseModel):
+    device_id: Optional[str] = None
+    device_fingerprint: Optional[str] = None
+
 class OtpVerifyRequest(BaseModel):
     otp_id: str
     code: str
