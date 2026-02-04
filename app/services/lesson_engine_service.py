@@ -131,7 +131,7 @@ async def start_attempt(db: AsyncSession, user_id: str, lesson_id: str):
             score_points=0,
             score_percent=0,
         )
-        await db.add(attempt)
+        db.add(attempt)
         await db.commit()
         await db.refresh(attempt)
 

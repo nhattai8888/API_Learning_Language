@@ -114,7 +114,7 @@ async def list_items(lesson_id: str, db: AsyncSession = Depends(get_db)):
 # ---------- Student flow: start/submit attempt ----------
 @router.post(
     "/lessons/{lesson_id}/attempts/start",
-    dependencies=[Depends(require_permissions(["LESSON_ATTEMPT_START"]))],
+    dependencies=[Depends(require_permissions(["LESSON_ATTEMPT"]))],
     response_model=ApiResponse[AttemptStartResponse],
 )
 async def start_attempt(lesson_id: str, user_id: str = Depends(get_current_user_id), db: AsyncSession = Depends(get_db)):

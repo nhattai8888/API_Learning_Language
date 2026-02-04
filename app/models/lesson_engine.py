@@ -21,7 +21,7 @@ class LessonItem(Base):
     # content: audio_url, transcript, options, etc.
     content: Mapped[dict | None] = mapped_column(JSONB)
     # correct_answer format depends on item_type
-    correct_answer: Mapped[dict | None] = mapped_column(JSONB)
+    answer: Mapped[dict | None] = mapped_column(JSONB)
 
     points: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
@@ -39,9 +39,8 @@ class LessonItemChoice(Base):
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     item_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("lesson_items.id", ondelete="CASCADE"), nullable=False)
-
     key: Mapped[str] = mapped_column(String(32), nullable=False)   # "A","B","C" or uuid short
-    text: Mapped[str] = mapped_column(Text, nullable=False)
+    text_value: Mapped[str] = mapped_column(Text, nullable=False)
     is_correct: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
     sort_order: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
