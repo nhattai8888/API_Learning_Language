@@ -29,10 +29,10 @@ class LexemeOut(BaseModel):
     language_id: UUID
     type: LexemeType
     lemma: str
-    phoenic: Optional[str] = None
+    phonetic: Optional[str] = None
     audio_url: Optional[str] = None
     difficulty: int
-    tags: Optional[Dict[str, Any]] = None
+    tags: Optional[List[str]] = None
     status: EntityStatus
     created_at: datetime
     updated_at: datetime

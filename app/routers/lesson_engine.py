@@ -149,7 +149,7 @@ async def start_attempt(lesson_id: str, user_id: str = Depends(get_current_user_
 
 @router.post(
     "/lessons/{lesson_id}/attempts/{attempt_id}/submit",
-    dependencies=[Depends(require_permissions(["LESSON_ATTEMPT_SUBMIT"]))],
+    dependencies=[Depends(require_permissions(["LESSON_ATTEMPT"]))],
     response_model=ApiResponse[AttemptSubmitResponse],
 )
 async def submit_attempt(

@@ -69,6 +69,7 @@ class LessonItemType(str, enum.Enum):
     REORDER = "REORDER"
     LISTEN = "LISTEN"
     SPEAK = "SPEAK"
+    DIALOGUE = "DIALOGUE"
 
 class LessonProgressStatus(str, enum.Enum):
     NOT_STARTED = "NOT_STARTED"
@@ -87,6 +88,9 @@ class WordPOS(str, enum.Enum):
     ADV = "ADV"
     PREP = "PREP"
     PHRASE = "PHRASE"
+    WORD = "WORD"
+    OTHER = "OTHER"
+    IDIOM = "IDIOM"
 
 class WordMastery(str, enum.Enum):
     NEW = "NEW"
@@ -117,6 +121,9 @@ class LexemeType(str, enum.Enum):
     PREP = "PREP"
     PHRASE = "PHRASE"
     OTHER = "OTHER"
+    WORD = "WORD"
+    IDIOM = "IDIOM"
+    
 
 class PublishStatus(str, enum.Enum):
     DRAFT = "DRAFT"
@@ -183,6 +190,7 @@ class GrammarExerciseType(str, enum.Enum):
     REORDER = "REORDER"
     ERROR_CORRECTION = "ERROR_CORRECTION"
     TRANSFORM = "TRANSFORM"
+    DIALOGUE = "DIALOGUE"
 
 class GrammarMastery(str, enum.Enum):
     NEW = "NEW"

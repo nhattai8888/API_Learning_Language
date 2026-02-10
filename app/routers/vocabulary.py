@@ -52,6 +52,7 @@ async def update_lexeme(lexeme_id: str, payload: LexemeUpdate, db: AsyncSession 
 async def get_lexeme(lexeme_id: str, db: AsyncSession = Depends(get_db)):
     try:
         x = await vocabulary_service.get_lexeme(db, lexeme_id)
+        
         return ApiResponse(data=LexemeOut.model_validate(x, from_attributes=True))
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -100,6 +101,7 @@ async def update_sense(sense_id: str, payload: SenseUpdate, db: AsyncSession = D
     response_model=ApiResponse[list[SenseOut]],
 )
 async def list_senses_by_lexeme(lexeme_id: str, db: AsyncSession = Depends(get_db)):
+    
     ss = await vocabulary_service.list_senses_by_lexeme(db, lexeme_id)
     return ApiResponse(data=[SenseOut.model_validate(s, from_attributes=True) for s in ss])
 

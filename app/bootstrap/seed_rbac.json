@@ -17,105 +17,329 @@
       "name": "Super Admin"
     }
   ],
-  "permissions": [  { "code": "AUTH_LOGIN", "module": "auth", "description": "Login (email/phone/otp)" },
-  { "code": "AUTH_LOGOUT", "module": "auth", "description": "Logout / revoke session" },
-  { "code": "AUTH_ME", "module": "auth", "description": "Get current user profile + roles + permissions (cached)" },
-
-  { "code": "RBAC_ROLE_CREATE", "module": "rbac", "description": "Create role" },
-  { "code": "RBAC_ROLE_READ", "module": "rbac", "description": "Read roles" },
-  { "code": "RBAC_ROLE_UPDATE", "module": "rbac", "description": "Update role" },
-  { "code": "RBAC_ROLE_DELETE", "module": "rbac", "description": "Delete role" },
-
-  { "code": "RBAC_PERMISSION_CREATE", "module": "rbac", "description": "Create permission" },
-  { "code": "RBAC_PERMISSION_READ", "module": "rbac", "description": "Read permissions" },
-  { "code": "RBAC_PERMISSION_UPDATE", "module": "rbac", "description": "Update permission" },
-  { "code": "RBAC_PERMISSION_DELETE", "module": "rbac", "description": "Delete permission" },
-
-  { "code": "RBAC_ASSIGN", "module": "rbac", "description": "Assign/unassign permissions to roles, roles to users" },
-
-  { "code": "USER_CREATE", "module": "users", "description": "Create user (admin)" },
-  { "code": "USER_READ", "module": "users", "description": "Read users" },
-  { "code": "USER_UPDATE", "module": "users", "description": "Update user" },
-  { "code": "USER_DELETE", "module": "users", "description": "Delete user" },
-
-
-  { "code": "CURRICULUM_CREATE", "module": "curriculum", "description": "Create curriculum/level/track" },
-  { "code": "CURRICULUM_READ", "module": "curriculum", "description": "Read curriculum" },
-  { "code": "CURRICULUM_UPDATE", "module": "curriculum", "description": "Update curriculum" },
-  { "code": "CURRICULUM_DELETE", "module": "curriculum", "description": "Delete curriculum" },
-
-
-  { "code": "LESSON_CREATE", "module": "lesson_engine", "description": "Create lesson" },
-  { "code": "LESSON_READ", "module": "lesson_engine", "description": "Read lesson" },
-  { "code": "LESSON_UPDATE", "module": "lesson_engine", "description": "Update lesson" },
-  { "code": "LESSON_DELETE", "module": "lesson_engine", "description": "Delete lesson" },
-
-  { "code": "LESSON_ITEM_CREATE", "module": "lesson_engine", "description": "Create lesson items" },
-  { "code": "LESSON_ITEM_READ", "module": "lesson_engine", "description": "Read lesson items" },
-  { "code": "LESSON_ITEM_UPDATE", "module": "lesson_engine", "description": "Update lesson items" },
-  { "code": "LESSON_ITEM_DELETE", "module": "lesson_engine", "description": "Delete lesson items" },
-
-  { "code": "LESSON_ATTEMPT", "module": "lesson_engine", "description": "Start/submit lesson attempt" },
-
-  
-  { "code": "LESSON_PROGRESS_READ", "module": "lesson_engine", "description": "Read lesson progress" },
-
-
-  { "code": "VOCAB_LEXEME_CREATE", "module": "vocab", "description": "Create lexeme/vocab data" },
-  { "code": "VOCAB_LEXEME_READ", "module": "vocab", "description": "Read lexemes" },
-  { "code": "VOCAB_LEXEME_UPDATE", "module": "vocab", "description": "Update lexeme" },
-  { "code": "VOCAB_LEXEME_DELETE", "module": "vocab", "description": "Delete lexeme" },
-
-  { "code": "VOCAB_USER_WORD_READ", "module": "vocab", "description": "Read user vocabulary (saved/weak/known)" },
-  { "code": "VOCAB_USER_WORD_WRITE", "module": "vocab", "description": "Add/update user word state" },
-
-  { "code": "REVIEW_PLAN_READ", "module": "srs", "description": "Get review queue / plan" },
-  { "code": "REVIEW_ATTEMPT", "module": "srs", "description": "Start/submit review attempt" },
-  { "code": "REVIEW_STATS_READ", "module": "srs", "description": "Read SRS stats" },
-
-
-  { "code": "SPEAKING_TASK_CREATE", "module": "speaking", "description": "Create speaking tasks" },
-  { "code": "SPEAKING_TASK_UPDATE", "module": "speaking", "description": "Update speaking tasks" },
-  { "code": "SPEAKING_TASK_READ", "module": "speaking", "description": "Read speaking tasks" },
-  { "code": "SPEAKING_TASK_DELETE", "module": "speaking", "description": "Delete speaking tasks" },
-
-  { "code": "SPEAKING_ATTEMPT", "module": "speaking", "description": "Start/submit/view speaking attempts" },
-  { "code": "MEDIA_UPLOAD", "module": "media", "description": "Create Google Drive upload session + finalize upload" },
-  { "code": "MEDIA_READ", "module": "media", "description": "Read media metadata (own/admin)" }],
+  "permissions": [
+    {
+      "code": "AUTH_LOGIN",
+      "module": "auth",
+      "description": "Login (email/phone/otp)"
+    },
+    {
+      "code": "AUTH_LOGOUT",
+      "module": "auth",
+      "description": "Logout / revoke session"
+    },
+    {
+      "code": "AUTH_ME",
+      "module": "auth",
+      "description": "Get current user profile + roles + permissions (cached)"
+    },
+    {
+      "code": "RBAC_ROLE_CREATE",
+      "module": "rbac",
+      "description": "Create role"
+    },
+    {
+      "code": "RBAC_ROLE_READ",
+      "module": "rbac",
+      "description": "Read roles"
+    },
+    {
+      "code": "RBAC_ROLE_UPDATE",
+      "module": "rbac",
+      "description": "Update role"
+    },
+    {
+      "code": "RBAC_ROLE_DELETE",
+      "module": "rbac",
+      "description": "Delete role"
+    },
+    {
+      "code": "RBAC_PERMISSION_CREATE",
+      "module": "rbac",
+      "description": "Create permission"
+    },
+    {
+      "code": "RBAC_PERMISSION_READ",
+      "module": "rbac",
+      "description": "Read permissions"
+    },
+    {
+      "code": "RBAC_PERMISSION_UPDATE",
+      "module": "rbac",
+      "description": "Update permission"
+    },
+    {
+      "code": "RBAC_PERMISSION_DELETE",
+      "module": "rbac",
+      "description": "Delete permission"
+    },
+    {
+      "code": "RBAC_ASSIGN",
+      "module": "rbac",
+      "description": "Assign/unassign permissions to roles, roles to users"
+    },
+    {
+      "code": "USER_CREATE",
+      "module": "users",
+      "description": "Create user (admin)"
+    },
+    {
+      "code": "USER_READ",
+      "module": "users",
+      "description": "Read users"
+    },
+    {
+      "code": "USER_UPDATE",
+      "module": "users",
+      "description": "Update user"
+    },
+    {
+      "code": "USER_DELETE",
+      "module": "users",
+      "description": "Delete user"
+    },
+    {
+      "code": "CURRICULUM_CREATE",
+      "module": "curriculum",
+      "description": "Create curriculum/level/track"
+    },
+    {
+      "code": "CURRICULUM_READ",
+      "module": "curriculum",
+      "description": "Read curriculum"
+    },
+    {
+      "code": "CURRICULUM_UPDATE",
+      "module": "curriculum",
+      "description": "Update curriculum"
+    },
+    {
+      "code": "CURRICULUM_DELETE",
+      "module": "curriculum",
+      "description": "Delete curriculum"
+    },
+    {
+      "code": "LESSON_CREATE",
+      "module": "lesson_engine",
+      "description": "Create lesson"
+    },
+    {
+      "code": "LESSON_READ",
+      "module": "lesson_engine",
+      "description": "Read lesson"
+    },
+    {
+      "code": "LESSON_UPDATE",
+      "module": "lesson_engine",
+      "description": "Update lesson"
+    },
+    {
+      "code": "LESSON_DELETE",
+      "module": "lesson_engine",
+      "description": "Delete lesson"
+    },
+    {
+      "code": "LESSON_ITEM_CREATE",
+      "module": "lesson_engine",
+      "description": "Create lesson items"
+    },
+    {
+      "code": "LESSON_ITEM_READ",
+      "module": "lesson_engine",
+      "description": "Read lesson items"
+    },
+    {
+      "code": "LESSON_ITEM_UPDATE",
+      "module": "lesson_engine",
+      "description": "Update lesson items"
+    },
+    {
+      "code": "LESSON_ITEM_DELETE",
+      "module": "lesson_engine",
+      "description": "Delete lesson items"
+    },
+    {
+      "code": "LESSON_ATTEMPT",
+      "module": "lesson_engine",
+      "description": "Start/submit lesson attempt"
+    },
+    {
+      "code": "LESSON_PROGRESS_READ",
+      "module": "lesson_engine",
+      "description": "Read lesson progress"
+    },
+    {
+      "code": "VOCAB_LEXEME_CREATE",
+      "module": "vocab",
+      "description": "Create lexeme/vocab data"
+    },
+    {
+      "code": "VOCAB_LEXEME_READ",
+      "module": "vocab",
+      "description": "Read lexemes"
+    },
+    {
+      "code": "VOCAB_LEXEME_UPDATE",
+      "module": "vocab",
+      "description": "Update lexeme"
+    },
+    {
+      "code": "VOCAB_LEXEME_DELETE",
+      "module": "vocab",
+      "description": "Delete lexeme"
+    },
+    {
+      "code": "VOCAB_LEXEME_CREATE",
+      "module": "vocab",
+      "description": "Create lexeme"
+    },
+    {
+      "code": "VOCAB_LEXEME_UPDATE",
+      "module": "vocab",
+      "description": "Update lexeme"
+    },
+    {
+      "code": "VOCAB_LEXEME_READ",
+      "module": "vocab",
+      "description": "Read lexeme"
+    },
+    {
+      "code": "VOCAB_SENSE_CREATE",
+      "module": "vocab",
+      "description": "Create sense"
+    },
+    {
+      "code": "VOCAB_SENSE_UPDATE",
+      "module": "vocab",
+      "description": "Update sense"
+    },
+    {
+      "code": "VOCAB_SENSE_READ",
+      "module": "vocab",
+      "description": "Read sense"
+    },
+    {
+      "code": "VOCAB_EXAMPLE_CREATE",
+      "module": "vocab",
+      "description": "Create example"
+    },
+    {
+      "code": "VOCAB_EXAMPLE_UPDATE",
+      "module": "vocab",
+      "description": "Update example"
+    },
+    {
+      "code": "VOCAB_EXAMPLE_READ",
+      "module": "vocab",
+      "description": "Read example"
+    },
+    {
+      "code": "VOCAB_LESSON_ATTACH",
+      "module": "vocab",
+      "description": "Attach lexemes to lesson"
+    },
+    {
+      "code": "VOCAB_LESSON_READ",
+      "module": "vocab",
+      "description": "Read lesson lexemes"
+    },
+    {
+      "code": "VOCAB_REVIEW",
+      "module": "vocab",
+      "description": "Review vocabulary"
+    },
+    {
+      "code": "VOCAB_WEAK_WORDS",
+      "module": "vocab",
+      "description": "List weak words"
+    },
+    {
+      "code": "VOCAB_USER_WORD_READ",
+      "module": "vocab",
+      "description": "Read user vocabulary (saved/weak/known)"
+    },
+    {
+      "code": "VOCAB_USER_WORD_WRITE",
+      "module": "vocab",
+      "description": "Add/update user word state"
+    },
+    {
+      "code": "REVIEW_PLAN_READ",
+      "module": "srs",
+      "description": "Get review queue / plan"
+    },
+    {
+      "code": "REVIEW_ATTEMPT",
+      "module": "srs",
+      "description": "Start/submit review attempt"
+    },
+    {
+      "code": "REVIEW_STATS_READ",
+      "module": "srs",
+      "description": "Read SRS stats"
+    },
+    {
+      "code": "SPEAKING_TASK_CREATE",
+      "module": "speaking",
+      "description": "Create speaking tasks"
+    },
+    {
+      "code": "SPEAKING_TASK_UPDATE",
+      "module": "speaking",
+      "description": "Update speaking tasks"
+    },
+    {
+      "code": "SPEAKING_TASK_READ",
+      "module": "speaking",
+      "description": "Read speaking tasks"
+    },
+    {
+      "code": "SPEAKING_TASK_DELETE",
+      "module": "speaking",
+      "description": "Delete speaking tasks"
+    },
+    {
+      "code": "SPEAKING_ATTEMPT",
+      "module": "speaking",
+      "description": "Start/submit/view speaking attempts"
+    },
+    {
+      "code": "MEDIA_UPLOAD",
+      "module": "media",
+      "description": "Create Google Drive upload session + finalize upload"
+    },
+    {
+      "code": "MEDIA_READ",
+      "module": "media",
+      "description": "Read media metadata (own/admin)"
+    }
+  ],
   "role_permissions": {
     "STUDENT": [
-       "AUTH_LOGIN",
+      "AUTH_LOGIN",
       "AUTH_LOGOUT",
       "AUTH_ME",
-
       "CURRICULUM_READ",
-
       "LESSON_READ",
       "LESSON_ITEM_READ",
       "LESSON_ATTEMPT",
       "LESSON_PROGRESS_READ",
-
       "VOCAB_LEXEME_READ",
       "VOCAB_USER_WORD_READ",
       "VOCAB_USER_WORD_WRITE",
-
       "REVIEW_PLAN_READ",
       "REVIEW_ATTEMPT",
       "REVIEW_STATS_READ",
-
       "SPEAKING_TASK_READ",
       "SPEAKING_ATTEMPT",
-
       "MEDIA_UPLOAD",
       "MEDIA_READ"
     ],
     "TEACHER": [
-          "AUTH_LOGIN",
+      "AUTH_LOGIN",
       "AUTH_LOGOUT",
       "AUTH_ME",
-
       "CURRICULUM_READ",
-
       "LESSON_CREATE",
       "LESSON_READ",
       "LESSON_UPDATE",
@@ -124,22 +348,27 @@
       "LESSON_ITEM_UPDATE",
       "LESSON_ATTEMPT",
       "LESSON_PROGRESS_READ",
-
       "VOCAB_LEXEME_CREATE",
       "VOCAB_LEXEME_READ",
       "VOCAB_LEXEME_UPDATE",
       "VOCAB_USER_WORD_READ",
       "VOCAB_USER_WORD_WRITE",
-
+      "VOCAB_SENSE_CREATE",
+      "VOCAB_SENSE_READ",
+      "VOCAB_SENSE_UPDATE",
+      "VOCAB_EXAMPLE_CREATE",
+      "VOCAB_EXAMPLE_READ",
+      "VOCAB_EXAMPLE_UPDATE",
+      "VOCAB_LESSON_ATTACH",
+      "VOCAB_LESSON_READ",
+      "VOCAB_REVIEW",
       "REVIEW_PLAN_READ",
       "REVIEW_ATTEMPT",
       "REVIEW_STATS_READ",
-
       "SPEAKING_TASK_CREATE",
       "SPEAKING_TASK_READ",
       "SPEAKING_TASK_UPDATE",
       "SPEAKING_ATTEMPT",
-
       "MEDIA_UPLOAD",
       "MEDIA_READ"
     ],
@@ -147,20 +376,16 @@
       "AUTH_LOGIN",
       "AUTH_LOGOUT",
       "AUTH_ME",
-
       "USER_CREATE",
       "USER_READ",
       "USER_UPDATE",
       "USER_DELETE",
-
       "RBAC_ROLE_READ",
       "RBAC_PERMISSION_READ",
-
       "CURRICULUM_CREATE",
       "CURRICULUM_READ",
       "CURRICULUM_UPDATE",
       "CURRICULUM_DELETE",
-
       "LESSON_CREATE",
       "LESSON_READ",
       "LESSON_UPDATE",
@@ -171,24 +396,20 @@
       "LESSON_ITEM_DELETE",
       "LESSON_ATTEMPT",
       "LESSON_PROGRESS_READ",
-
       "VOCAB_LEXEME_CREATE",
       "VOCAB_LEXEME_READ",
       "VOCAB_LEXEME_UPDATE",
       "VOCAB_LEXEME_DELETE",
       "VOCAB_USER_WORD_READ",
       "VOCAB_USER_WORD_WRITE",
-
       "REVIEW_PLAN_READ",
       "REVIEW_ATTEMPT",
       "REVIEW_STATS_READ",
-
       "SPEAKING_TASK_CREATE",
       "SPEAKING_TASK_READ",
       "SPEAKING_TASK_UPDATE",
       "SPEAKING_TASK_DELETE",
       "SPEAKING_ATTEMPT",
-
       "MEDIA_UPLOAD",
       "MEDIA_READ"
     ],
