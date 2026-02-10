@@ -10,7 +10,7 @@ class LexemeCreate(BaseModel):
     language_id: UUID
     type: LexemeType
     lemma: str = Field(min_length=1, max_length=180)
-    phoenic: Optional[str] = None
+    phonetic: Optional[str] = None
     audio_url: Optional[str] = None
     difficulty: int = Field(default=1, ge=1, le=10)
     tags: Optional[Dict[str, Any]] = None
@@ -18,7 +18,7 @@ class LexemeCreate(BaseModel):
 class LexemeUpdate(BaseModel):
     type: Optional[LexemeType] = None
     lemma: Optional[str] = Field(default=None, max_length=180)
-    phoenic: Optional[str] = None
+    phonetic: Optional[str] = None
     audio_url: Optional[str] = None
     difficulty: Optional[int] = Field(default=None, ge=1, le=10)
     tags: Optional[Dict[str, Any]] = None
